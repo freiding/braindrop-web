@@ -1,0 +1,9 @@
+services:
+  web:
+    build:
+      context: .
+    image: braindrop-web
+    container_name: braindrop-web
+    ports:
+      - "8080:80"
+    restart: unless-stopped

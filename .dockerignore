@@ -1,0 +1,24 @@
+# build context excludes — keep the image small and the build reproducible
+node_modules
+dist
+.astro
+.git
+.github
+.gitignore
+
+# design references are not needed to build the site
+design
+
+# docker files themselves
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# local noise
+*.log
+npm-debug.log*
+.env
+.env.*
+.DS_Store
+.vscode
+.idea

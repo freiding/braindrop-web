@@ -32,6 +32,26 @@ npm run generate:qr  # regenerate public/qr-play.svg (needs no network at runtim
 host — GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3 — with no rewrite
 rules. `trailingSlash: 'always'`.
 
+## Docker
+
+Multi-stage build: Node builds the static site, then nginx serves `dist/`. The
+final image contains only the built files and nginx — no Node, no `node_modules`.
+
+```bash
+docker compose up --build      # -> http://localhost:8080
+
+# or plain docker:
+docker build -t braindrop-web .
+docker run --rm -p 8080:80 braindrop-web
+```
+
+- `Dockerfile` — `node:22-alpine` build stage → `nginx:1.27-alpine` runtime
+- `nginx.conf` — gzip, long-cache for hashed assets/fonts, `must-revalidate` for
+  HTML, `try_files $uri $uri/ =404` routing (matches `trailingSlash: 'always'`),
+  `/404.html` error page, baseline security headers
+- `.dockerignore` — keeps `node_modules`, `dist`, `design/`, `.git` out of the
+  build context
+
 ## Structure
 
 ```
@@ -56,6 +76,8 @@ src/
   pages/
     index.astro            hero · «Что внутри» · «Экраны» · «Скоро» · CTA · footer
     privacy.astro terms.astro
+    404.astro
+Dockerfile .dockerignore nginx.conf docker-compose.yml
 ```
 
 The two toggle blocks from the prototype (`showQr`, `showRoadmap`) are plain

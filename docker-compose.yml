@@ -1,22 +1,15 @@
-# docker-compose.yml — local convenience only, NOT a production runtime.
+# docker-compose.yml — build helper, NOT a runtime.
 #
-# `Dockerfile` stays build-only (see README). This file chains that build to a
-# stock nginx so you can preview the real static output the same way a host
-# would serve it:
+# Mirrors `Dockerfile` (build-only): compiles the static site into ./dist with a
+# pinned Node toolchain. Nothing is served here — serving is up to the web
+# server on the host (see README).
 #
-#   docker compose up --build       # build src/ -> ./dist, serve on :8080
-#   docker compose run --rm build   # just refresh ./dist, don't serve
+#   docker compose run --rm build   # writes ./dist on the host
 #
-# Production is still "drop dist/ onto the static host of your choice".
-#
-# The inline `configs.content` below needs Compose v2.23+. On older Compose,
-# move that block to ./docker/nginx.conf and bind-mount it instead.
-
 name: braindrop-web
 
 services:
-  # One-shot: compile the site with the same Node the Dockerfile pins.
-  # Exits 0 when dist/ is written; it is a task, not a long-running service.
+  # One-shot: compile src/ -> ./dist, then exit. It is a task, not a service.
   build:
     image: node:22-alpine
     working_dir: /app
@@ -24,44 +17,6 @@ services:
     volumes:
       - .:/app
       - node_modules:/app/node_modules
-
-  # Serve the exported files with the rules from the README's "Serving notes".
-  web:
-    image: nginx:1.27-alpine
-    ports:
-      - "8080:80"
-    volumes:
-      - ./dist:/usr/share/nginx/html:ro
-    configs:
-      - source: nginx_site
-        target: /etc/nginx/conf.d/default.conf
-    depends_on:
-      build:
-        condition: service_completed_successfully
-    restart: unless-stopped
-
-configs:
-  nginx_site:
-    content: |
-      server {
-          listen       80;
-          server_name  _;
-          root   /usr/share/nginx/html;
-          index  index.html;
-
-          # /privacy -> /privacy/ -> /privacy/index.html
-          location / {
-              try_files $uri $uri/ =404;
-          }
-
-          error_page 404 /404.html;
-
-          # hashed assets + fonts never change under a given name
-          location ~* ^/(_astro|fonts)/ {
-              expires 1y;
-              add_header Cache-Control "public, immutable";
-          }
-      }
 
 volumes:
   node_modules:

@@ -45,6 +45,14 @@ docker build --output type=local,dest=dist .
 
 Then point your web server's `root` at that `dist/`.
 
+For a local preview, `docker-compose.yml` chains that build to a stock nginx
+(the serving rules below, baked in) — no runtime image of our own:
+
+```bash
+docker compose up --build       # build -> ./dist, serve on http://localhost:8080
+docker compose run --rm build   # just refresh ./dist, don't serve
+```
+
 ### Serving notes
 
 The build uses `trailingSlash: 'always'` + directory format, so every route is

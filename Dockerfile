@@ -1,25 +1,24 @@
 # syntax=docker/dockerfile:1
+#
+# Build-only image: compiles the static site in a pinned Node toolchain so the
+# server needs neither Node nor the source tree. It does NOT serve anything —
+# serve the exported files with the web server of your choice.
+#
+#   docker build --output type=local,dest=dist .
+#   # -> ./dist now holds the site; point your web server's root at it
+#
+# (Plain `docker build -t braindrop-web .` also works; the built files are then
+#  at /app/dist inside the `build` stage.)
 
-# ---- Build the static site ----
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# Install deps against the lockfile first for better layer caching
 COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
 RUN npm run build
 
-# ---- Serve the static output with nginx ----
-FROM nginx:1.27-alpine AS runtime
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget -q -O - http://localhost/ >/dev/null 2>&1 || exit 1
-
-# nginx:alpine already sets: CMD ["nginx", "-g", "daemon off;"]
+# Artifact-only stage: `--output` copies its contents to the host.
+FROM scratch AS export
+COPY --from=build /app/dist/ /

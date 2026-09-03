@@ -12,7 +12,6 @@ design
 # docker files themselves
 Dockerfile
 .dockerignore
-docker-compose.yml
 
 # local noise
 *.log

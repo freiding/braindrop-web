@@ -32,25 +32,40 @@ npm run generate:qr  # regenerate public/qr-play.svg (needs no network at runtim
 host — GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3 — with no rewrite
 rules. `trailingSlash: 'always'`.
 
-## Docker
+## Docker (build only)
 
-Multi-stage build: Node builds the static site, then nginx serves `dist/`. The
-final image contains only the built files and nginx — no Node, no `node_modules`.
+`Dockerfile` is a **build image**, not a runtime one — it compiles the site in a
+pinned Node toolchain so the server needs neither Node nor the source tree. It
+does not serve anything; serving is up to the web server on the host.
 
 ```bash
-docker compose up --build      # -> http://localhost:8080
-
-# or plain docker:
-docker build -t braindrop-web .
-docker run --rm -p 8080:80 braindrop-web
+# writes the built site to ./dist on the host
+docker build --output type=local,dest=dist .
 ```
 
-- `Dockerfile` — `node:22-alpine` build stage → `nginx:1.27-alpine` runtime
-- `nginx.conf` — gzip, long-cache for hashed assets/fonts, `must-revalidate` for
-  HTML, `try_files $uri $uri/ =404` routing (matches `trailingSlash: 'always'`),
-  `/404.html` error page, baseline security headers
-- `.dockerignore` — keeps `node_modules`, `dist`, `design/`, `.git` out of the
-  build context
+Then point your web server's `root` at that `dist/`.
+
+### Serving notes
+
+The build uses `trailingSlash: 'always'` + directory format, so every route is
+`<path>/index.html`. An nginx `server` block needs little more than:
+
+```nginx
+root /srv/braindrop/dist;
+index index.html;
+
+location / {
+    try_files $uri $uri/ =404;   # /privacy -> /privacy/ -> /privacy/index.html
+}
+
+error_page 404 /404.html;
+
+# optional: hashed assets + fonts never change under a given name
+location ~* ^/(_astro|fonts)/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+```
 
 ## Structure
 
@@ -77,7 +92,7 @@ src/
     index.astro            hero · «Что внутри» · «Экраны» · «Скоро» · CTA · footer
     privacy.astro terms.astro
     404.astro
-Dockerfile .dockerignore nginx.conf docker-compose.yml
+Dockerfile .dockerignore
 ```
 
 The two toggle blocks from the prototype (`showQr`, `showRoadmap`) are plain

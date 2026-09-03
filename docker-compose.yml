@@ -8,13 +8,14 @@ services:
   web:
     image: node:22-alpine
     working_dir: /app
-    # Build the static site, then serve dist/ with busybox httpd (bundled in the
-    # alpine image). Unlike `astro preview` it has no host-header allowlist and
-    # no PID lockfile in the node_modules volume to get wedged on a recreate.
+    # Build the static site, then serve dist/ with `serve` (pulled on demand by
+    # npx). Unlike `astro preview` it has no host-header allowlist and no PID
+    # lockfile in the node_modules volume to get wedged on a recreate; unlike
+    # busybox httpd it's actually present in this image.
     command: >
       sh -c "[ -d node_modules/astro ] || npm ci;
              npm run build &&
-             exec busybox httpd -f -v -p 13367 -h dist"
+             exec npx --yes serve dist -l 13367 --no-port-switching --no-clipboard"
     ports:
       - "13369:13367"
     volumes:

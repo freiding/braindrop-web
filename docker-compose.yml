@@ -8,10 +8,14 @@ services:
   web:
     image: node:22-alpine
     working_dir: /app
+    # `--force` replaces a stale preview server: Astro records the running
+    # server's PID under the persistent node_modules volume, so a recreated
+    # container otherwise refuses to start ("Another astro preview server is
+    # already running").
     command: >
       sh -c "[ -d node_modules/astro ] || npm ci;
              npm run build &&
-             npm run preview -- --host 0.0.0.0 --port 13367"
+             npm run preview -- --host 0.0.0.0 --port 13367 --force"
     ports:
       - "13369:13367"
     volumes:

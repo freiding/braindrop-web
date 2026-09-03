@@ -14,12 +14,4 @@ export default defineConfig({
     format: 'directory',
   },
   integrations: [sitemap()],
-  // `astro preview` runs on Vite's preview server, which rejects requests whose
-  // Host header isn't in this list. "braindrop" is the service name it's reached
-  // by inside the Docker/compose network.
-  vite: {
-    preview: {
-      allowedHosts: ['braindrop'],
-    },
-  },
 });

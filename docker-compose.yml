@@ -8,14 +8,13 @@ services:
   web:
     image: node:22-alpine
     working_dir: /app
-    # `--force` replaces a stale preview server: Astro records the running
-    # server's PID under the persistent node_modules volume, so a recreated
-    # container otherwise refuses to start ("Another astro preview server is
-    # already running").
+    # Build the static site, then serve dist/ with busybox httpd (bundled in the
+    # alpine image). Unlike `astro preview` it has no host-header allowlist and
+    # no PID lockfile in the node_modules volume to get wedged on a recreate.
     command: >
       sh -c "[ -d node_modules/astro ] || npm ci;
              npm run build &&
-             npm run preview -- --host 0.0.0.0 --port 13367 --force"
+             exec busybox httpd -f -v -p 13367 -h dist"
     ports:
       - "13369:13367"
     volumes:

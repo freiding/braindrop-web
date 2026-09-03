@@ -32,48 +32,33 @@ npm run generate:qr  # regenerate public/qr-play.svg (needs no network at runtim
 host — GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3 — with no rewrite
 rules. `trailingSlash: 'always'`.
 
-## Docker (build only)
+## Docker
 
-`Dockerfile` is a **build image**, not a runtime one — it compiles the site in a
-pinned Node toolchain so the server needs neither Node nor the source tree. It
-does not serve anything; serving is up to the web server on the host.
+`Dockerfile` is multi-stage: a pinned Node toolchain compiles the site, then an
+`nginx:alpine` stage serves the static `dist/` — the runtime image carries
+neither Node nor the source.
 
 ```bash
-# writes the built site to ./dist on the host
-docker build --output type=local,dest=dist .
+docker compose up -d --build      # build + serve on http://localhost:13369
 ```
 
-Then point your web server's `root` at that `dist/`.
+`docker-compose.yml` builds the `runtime` target and publishes container `:80`
+on host `13369`. Put it behind another reverse proxy by pointing that proxy at
+`http://<host>:13369`; `absolute_redirect off` in `nginx.conf` keeps redirects
+relative so a different external host/port/scheme just works.
 
-`docker-compose.yml` runs that build, and can also serve the result with
-`astro preview` (still just Node — no web-server image):
+Need the raw files instead of a running server:
 
 ```bash
-docker compose run --rm build   # one-shot: writes ./dist on the host
-docker compose up preview        # build + serve on http://localhost:13367
+docker build --target export --output type=local,dest=dist .   # writes ./dist, no image
 ```
 
 ### Serving notes
 
 The build uses `trailingSlash: 'always'` + directory format, so every route is
-`<path>/index.html`. An nginx `server` block needs little more than:
-
-```nginx
-root /srv/braindrop/dist;
-index index.html;
-
-location / {
-    try_files $uri $uri/ =404;   # /privacy -> /privacy/ -> /privacy/index.html
-}
-
-error_page 404 /404.html;
-
-# optional: hashed assets + fonts never change under a given name
-location ~* ^/(_astro|fonts)/ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-}
-```
+`<path>/index.html`. `nginx.conf` handles that with
+`try_files $uri $uri/ =404`, an `error_page 404 /404.html`, and a long
+`Cache-Control` on the fingerprinted `/_astro/` bundles.
 
 ## Structure
 

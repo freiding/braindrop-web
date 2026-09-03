@@ -1,0 +1,304 @@
+---
+import Icon from "../Icon.astro";
+import SegmentedBar from "../SegmentedBar.astro";
+
+/** Rebuilt from QuizScreen.kt — a question with the mistake breakdown shown
+ *  immediately after answering. */
+const progress = [
+  "correct",
+  "correct",
+  "incorrect",
+  "current",
+  "empty",
+  "empty",
+  "empty",
+  "empty",
+  "empty",
+  "empty",
+] as const;
+---
+
+<div class="qz">
+  <div class="qz__header">
+    <span class="qz__iconbtn">
+      <Icon name="close" size={20} color="#101A2B" weight={2.4} />
+    </span>
+    <SegmentedBar
+      class="qz__bar"
+      palette="quiz"
+      height={7}
+      gap={3}
+      radius={3}
+      states={[...progress]}
+    />
+    <span class="qz__counter">4/10</span>
+  </div>
+
+  <div class="qz__content">
+    <div class="qcard">
+      <span class="qcard__label">ВЫБЕРИ ФОРМУ</span>
+      <p class="qcard__word">write</p>
+      <div class="qcard__chip">
+        <span class="qcard__chip-fam">A·B·C</span>
+        <span class="qcard__chip-hint">
+          speak/spoke/spoken, take/took/taken, write/wrote/written
+        </span>
+      </div>
+    </div>
+
+    <div class="mistake">
+      <div class="mistake__head">
+        <span class="mistake__base">write</span>
+        <span class="mistake__forms">wrote · written</span>
+        <span class="mistake__trans">писать</span>
+      </div>
+      <p class="mistake__example">
+        She has{" "}<span>written</span>{" "}three letters today.
+      </p>
+    </div>
+
+    <div class="qz__spacer"></div>
+
+    <div class="qz__answers">
+      <div class="ans">
+        <span class="ans__dot ans__dot--idle"></span>
+        <span class="ans__text">writed</span>
+      </div>
+      <div class="ans ans--correct">
+        <span class="ans__dot ans__dot--correct">
+          <Icon name="check" size={14} color="#fff" weight={2.2} />
+        </span>
+        <span class="ans__text">written</span>
+      </div>
+      <div class="ans ans--wrong">
+        <span class="ans__dot ans__dot--wrong">
+          <Icon name="cross" size={13} color="#fff" weight={2.2} />
+        </span>
+        <span class="ans__text">wroten</span>
+        <span class="ans__note">ваш ответ</span>
+      </div>
+      <div class="ans">
+        <span class="ans__dot ans__dot--idle"></span>
+        <span class="ans__text">wrotten</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="qz__footer">
+    <div class="qz__next">
+      <span>Дальше</span>
+      <Icon name="chevron-right" size={16} color="#fff" weight={2.4} />
+    </div>
+  </div>
+</div>
+
+<style>
+  .qz {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--canvas);
+  }
+
+  .qz__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 12px 4px;
+  }
+  .qz__iconbtn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .qz :global(.qz__bar) {
+    flex: 1;
+  }
+  .qz__counter {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--ink-600);
+  }
+
+  .qz__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 20px 12px;
+  }
+
+  .qcard {
+    background: #fff;
+    border-radius: var(--r-xl);
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .qcard__label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: var(--ink-400);
+  }
+  .qcard__word {
+    font-size: 36px;
+    line-height: 38px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .qcard__chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--grp-abc-surface);
+    border-radius: var(--r-md);
+    padding: 6px 12px;
+    margin-top: 16px;
+  }
+  .qcard__chip-fam {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    color: var(--grp-abc);
+    flex: none;
+  }
+  .qcard__chip-hint {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--grp-abc-ink);
+  }
+
+  .mistake {
+    background: var(--mistake-surface);
+    border-radius: var(--r-lg);
+    padding: 16px 18px;
+    margin-top: 16px;
+  }
+  .mistake__head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .mistake__base {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .mistake__forms {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--mistake-accent);
+  }
+  .mistake__trans {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--mistake-muted);
+  }
+  .mistake__example {
+    font-size: 12.5px;
+    line-height: 17.5px;
+    font-weight: 500;
+    color: var(--mistake-hint);
+    margin-top: 8px;
+  }
+  .mistake__example span {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .qz__spacer {
+    flex: 1;
+  }
+
+  .qz__answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ans {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    height: 58px;
+    padding: 0 18px;
+    background: var(--answer-muted-surface);
+    border: 1.5px solid var(--answer-muted-outline);
+    border-radius: var(--r-btn);
+  }
+  .ans__dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ans__dot--idle {
+    border: 1.5px solid var(--answer-idle-outline);
+  }
+  .ans__dot--correct {
+    background: var(--correct);
+  }
+  .ans__dot--wrong {
+    background: var(--incorrect);
+  }
+  .ans__text {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 800;
+    color: rgba(74, 90, 114, 0.55);
+  }
+  .ans__note {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--incorrect-ink);
+  }
+  .ans--correct {
+    background: var(--correct-tint);
+    border-color: var(--correct);
+  }
+  .ans--correct .ans__text {
+    color: var(--correct-ink);
+  }
+  .ans--wrong {
+    background: var(--incorrect-tint);
+    border-color: var(--incorrect);
+  }
+  .ans--wrong .ans__text {
+    color: var(--incorrect-ink);
+  }
+
+  .qz__footer {
+    height: 96px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+  }
+  .qz__next {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 56px;
+    background: var(--primary);
+    border-radius: var(--r-btn);
+  }
+  .qz__next span {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+  }
+</style>

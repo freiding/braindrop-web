@@ -1,0 +1,64 @@
+---
+import { PLAY_URL } from "../consts";
+---
+
+<footer class="site-footer container">
+  <div class="site-footer__brand">
+    <img src="/braindrop-lockup.svg" alt="BrainDrop" width="100" height="30" />
+    <span class="site-footer__copy">© 2026 BrainDrop</span>
+  </div>
+  <nav class="site-footer__links">
+    <a href="/privacy/">Privacy Policy</a>
+    <a href="/terms/">Terms &amp; Conditions</a>
+    <a href={PLAY_URL} target="_blank" rel="noopener">Google Play</a>
+  </nav>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .site-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .site-footer__brand img {
+    display: block;
+    height: 30px;
+    width: auto;
+  }
+  .site-footer__copy {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-400);
+  }
+
+  .site-footer__links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .site-footer__links a {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 720px) {
+    .site-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .site-footer__links {
+      flex-wrap: wrap;
+      gap: 20px 28px;
+    }
+  }
+</style>

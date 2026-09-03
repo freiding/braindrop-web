@@ -1,0 +1,490 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import PhoneFrame from "../components/PhoneFrame.astro";
+import HomeMockup from "../components/mockups/HomeMockup.astro";
+import VerbListMockup from "../components/mockups/VerbListMockup.astro";
+import QuizMockup from "../components/mockups/QuizMockup.astro";
+import { PLAY_URL, STATS } from "../consts";
+
+// Toggleable blocks from the prototype (`showQr`, `showRoadmap`).
+const showQr = true;
+const showRoadmap = true;
+
+const inside = [
+  {
+    emoji: "📚",
+    name: "Irregular Verbs",
+    meta: "179 глаголов · 12 групп",
+    text: "Список с поиском и группировкой по морфологическим схемам A·A·A, A·B·B, A·B·C. Свайп вправо отмечает глагол изученным, деталь показывает три формы и примеры.",
+  },
+  {
+    emoji: "⏰",
+    name: "English Tenses",
+    meta: "12 времён с примерами",
+    text: "Формулы и случаи употребления, шпаргалка одной страницей, разбор пар, которые путают, и квиз по временам.",
+  },
+  {
+    emoji: "💬",
+    name: "Phrasal Verbs",
+    meta: "72 глагола · 6 категорий",
+    text: "Фразовые глаголы по темам, значения с примерами и три типа квиза — от значения к глаголу и обратно.",
+  },
+];
+
+const stats = [
+  { value: STATS.verbs, label: "ГЛАГОЛОВ" },
+  { value: STATS.tenses, label: "ВРЕМЁН" },
+  { value: STATS.phrasal, label: "ФРАЗОВЫХ" },
+  { value: STATS.quizTypes, label: "ТИПА КВИЗА" },
+];
+---
+
+<BaseLayout path="/">
+  <div class="page">
+    <Header />
+
+    <main>
+      <!-- Hero -->
+      <section class="hero container">
+        <div class="hero__col">
+          <p class="hero__kicker">ANDROID · РУССКИЙ ИНТЕРФЕЙС</p>
+          <h1 class="hero__title">Тренажёр английского<br />для русскоязычных</h1>
+          <p class="hero__lead">
+            Неправильные глаголы, 12 времён и фразовые глаголы — списки с
+            группировкой, разбор форм и квизы. Данные лежат на устройстве:
+            работает офлайн и без аккаунта.
+          </p>
+
+          <div class="hero__cta">
+            <a href={PLAY_URL} class="btn btn--primary" target="_blank" rel="noopener">
+              <Icon name="play" size={18} color="#fff" />
+              Скачать в Google Play
+            </a>
+
+            {
+              showQr && (
+                <div class="qr">
+                  <img
+                    class="qr__img"
+                    src="/qr-play.svg"
+                    width="72"
+                    height="72"
+                    alt="QR-код: ссылка на BrainDrop в Google Play"
+                  />
+                  <p class="qr__text">
+                    Наведите камеру<br />
+                    <span>откроется Google Play</span>
+                  </p>
+                </div>
+              )
+            }
+          </div>
+
+          <dl class="hero__stats">
+            {
+              stats.map((s) => (
+                <div class="stat">
+                  <dd class="stat__value">{s.value}</dd>
+                  <dt class="stat__label">{s.label}</dt>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+
+        <div class="hero__phone">
+          <PhoneFrame>
+            <HomeMockup />
+          </PhoneFrame>
+        </div>
+      </section>
+
+      <!-- What's inside -->
+      <section id="inside" class="inside container">
+        <p class="section-kicker">ЧТО ВНУТРИ</p>
+        <h2 class="h2 inside__title">Три категории, одна механика</h2>
+        <div class="inside__grid">
+          {
+            inside.map((c) => (
+              <article class="feature card">
+                <div class="feature__tile">{c.emoji}</div>
+                <h3 class="feature__name">{c.name}</h3>
+                <p class="feature__meta">{c.meta}</p>
+                <p class="feature__text">{c.text}</p>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Screens -->
+      <section id="screens" class="screens container">
+        <p class="section-kicker">ЭКРАНЫ</p>
+        <h2 class="h2 screens__title">Список и квиз</h2>
+        <div class="screens__grid">
+          <PhoneFrame label="Список с группировкой и поиском">
+            <VerbListMockup />
+          </PhoneFrame>
+          <PhoneFrame label="Квиз: разбор ошибки сразу после ответа">
+            <QuizMockup />
+          </PhoneFrame>
+        </div>
+      </section>
+
+      <!-- Roadmap -->
+      {
+        showRoadmap && (
+          <section class="soon container">
+            <p class="section-kicker">СКОРО</p>
+            <div class="soon__card">
+              <div class="soon__tile">
+                <Icon name="person" size={22} color="#6B7A90" weight={2.3} />
+              </div>
+              <div class="soon__body">
+                <p class="soon__name">Профиль</p>
+                <p class="soon__text">
+                  Настройки аккаунта и напоминания появятся в одном из следующих
+                  обновлений.
+                </p>
+              </div>
+              <span class="soon__badge">СКОРО</span>
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Final CTA -->
+      <section class="cta container">
+        <div class="cta__panel">
+          <div class="cta__text">
+            <h2 class="h2 cta__title">Поставьте цель на день<br />и держите серию</h2>
+            <p class="cta__sub">
+              Бесплатно, без рекламы и регистрации. Прогресс хранится на
+              устройстве.
+            </p>
+          </div>
+          <a href={PLAY_URL} class="btn btn--on-primary" target="_blank" rel="noopener">
+            <Icon name="play" size={18} color="#1B3F97" />
+            Скачать в Google Play
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---------------- Hero ---------------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 390px;
+    gap: 64px;
+    align-items: center;
+    padding: 76px 0 88px;
+  }
+
+  .hero__kicker {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: var(--ink-400);
+    margin-bottom: 18px;
+  }
+
+  .hero__title {
+    font-size: 54px;
+    line-height: 58px;
+    font-weight: 800;
+    letter-spacing: -1.6px;
+    text-wrap: pretty;
+  }
+
+  .hero__lead {
+    margin-top: 20px;
+    max-width: 470px;
+    font-size: 16.5px;
+    line-height: 26px;
+    font-weight: 500;
+    color: var(--ink-600);
+    text-wrap: pretty;
+  }
+
+  .hero__cta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+
+  .qr {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px 10px 10px;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-card);
+  }
+  .qr__img {
+    width: 72px;
+    height: 72px;
+    display: block;
+    border-radius: var(--r-sm);
+  }
+  .qr__text {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+    color: var(--ink-600);
+    max-width: 130px;
+  }
+  .qr__text span {
+    color: var(--ink-400);
+    font-weight: 500;
+  }
+
+  .hero__stats {
+    display: flex;
+    gap: 40px;
+    margin: 48px 0 0;
+    flex-wrap: wrap;
+  }
+  .stat__value {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+  }
+  .stat__label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: var(--ink-400);
+    margin-top: 4px;
+  }
+
+  .hero__phone {
+    justify-self: end;
+  }
+
+  /* ---------------- What's inside ---------------- */
+  .inside {
+    padding: 8px 0 88px;
+  }
+  .inside__title {
+    margin-bottom: 32px;
+  }
+  .inside__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .feature {
+    padding: 24px;
+  }
+  .feature__tile {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-btn);
+    background: var(--primary-tint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  .feature__name {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-top: 18px;
+  }
+  .feature__meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-top: 6px;
+  }
+  .feature__text {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+
+  /* ---------------- Screens ---------------- */
+  .screens {
+    padding: 0 0 96px;
+  }
+  .screens__title {
+    margin-bottom: 40px;
+  }
+  .screens__grid {
+    display: grid;
+    grid-template-columns: 390px 390px;
+    gap: 56px;
+    justify-content: center;
+  }
+
+  /* ---------------- Roadmap ---------------- */
+  .soon {
+    padding: 0 0 96px;
+  }
+  .soon__card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--soon-surface);
+    border: 1.5px dashed var(--soon-border);
+    border-radius: var(--r-card);
+    padding: 22px 24px;
+  }
+  .soon__tile {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background: var(--soon-tile);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .soon__body {
+    flex: 1;
+  }
+  .soon__name {
+    font-size: 16.5px;
+    font-weight: 800;
+    color: var(--soon-ink);
+  }
+  .soon__text {
+    font-size: 13.5px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--ink-400);
+  }
+  .soon__badge {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: var(--soon-ink);
+    background: var(--border-soft);
+    border-radius: 12px;
+    padding: 6px 12px;
+    flex: none;
+  }
+
+  /* ---------------- Final CTA ---------------- */
+  .cta {
+    padding: 0 0 96px;
+  }
+  .cta__panel {
+    background: var(--primary);
+    border-radius: var(--r-xxl);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .cta__title {
+    color: #fff;
+  }
+  .cta__sub {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 23px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 420px;
+  }
+
+  /* ---------------- Responsive ---------------- */
+  @media (max-width: 1080px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 48px;
+      padding: 56px 0 72px;
+      justify-items: center;
+    }
+    .hero__col {
+      max-width: 560px;
+    }
+    .hero__phone {
+      justify-self: center;
+    }
+  }
+
+  @media (max-width: 940px) {
+    .screens__grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+      justify-items: center;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero__title {
+      font-size: 38px;
+      line-height: 42px;
+      letter-spacing: -1px;
+    }
+    .h2 {
+      font-size: 26px;
+      line-height: 31px;
+    }
+    .inside {
+      padding: 8px 0 64px;
+    }
+    .inside__grid {
+      grid-template-columns: 1fr;
+    }
+    .screens {
+      padding: 0 0 72px;
+    }
+    .soon {
+      padding: 0 0 72px;
+    }
+    .soon__card {
+      flex-wrap: wrap;
+    }
+    .soon__body {
+      flex-basis: min(100%, 260px);
+    }
+    .cta {
+      padding: 0 0 72px;
+    }
+    .cta__panel {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      padding: 32px;
+    }
+    .cta__panel .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .hero__title {
+      font-size: 32px;
+      line-height: 37px;
+    }
+    .hero__cta .btn--primary {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

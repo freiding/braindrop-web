@@ -1,0 +1,24 @@
+{
+  "name": "braindrop-web",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page for the BrainDrop Android app",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro",
+    "generate:qr": "node scripts/generate-qr.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "qrcode": "^1.5.4",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,399 @@
+---
+import Icon from "../Icon.astro";
+import SegmentedBar from "../SegmentedBar.astro";
+
+/** Rebuilt from VerbListScreen.kt / VerbFormsLine.kt — grouped list with search. */
+const headerBar = [
+  ..."fff".split("").map(() => "full" as const),
+  "partial" as const,
+  ...Array(8).fill("empty" as const),
+];
+---
+
+<div class="vl">
+  <!-- sticky top -->
+  <div class="vl__top">
+    <div class="vl__header">
+      <span class="vl__iconbtn">
+        <Icon name="chevron-left" size={22} color="#101A2B" weight={2.4} />
+      </span>
+      <span class="vl__title">Irregular Verbs</span>
+      <span class="vl__iconbtn">
+        <Icon name="search" size={20} color="#101A2B" weight={2.2} />
+      </span>
+    </div>
+
+    <div class="vl__meta">
+      <div class="vl__progress-row">
+        <span class="vl__progress-label">47 из 179 изучено</span>
+        <span class="vl__progress-pct">26%</span>
+      </div>
+      <SegmentedBar class="vl__bar" height={7} gap={3} radius={3} states={headerBar} />
+
+      <div class="vl__search">
+        <Icon name="search" size={18} color="#8494A8" weight={2.2} />
+        <span>Глагол или перевод</span>
+      </div>
+
+      <div class="vl__filters">
+        <span class="vl__pill vl__pill--active">Неизученные</span>
+        <span class="vl__pill">
+          Группы
+          <Icon name="list" size={15} color="#6B7A90" weight={2.2} />
+        </span>
+        <span class="vl__filters-spacer"></span>
+        <span class="vl__quiz">
+          Квиз
+          <Icon name="chevron-right" size={13} color="#fff" weight={2.2} />
+        </span>
+      </div>
+    </div>
+    <div class="vl__divider-hard"></div>
+  </div>
+
+  <!-- group: A·B·C -->
+  <div class="ghead ghead--abc">
+    <div class="ghead__row">
+      <div class="ghead__left">
+        <span class="ghead__fam">A·B·C</span>
+        <span class="ghead__title">i → a → u</span>
+      </div>
+      <span class="ghead__count">1/12</span>
+    </div>
+    <p class="ghead__hint">sing/sang/sung, drink/drank/drunk, swim/swam/swum</p>
+  </div>
+
+  <div class="vrow" style="--g: var(--grp-abc); --g-surface: var(--grp-abc-surface)">
+    <span class="vrow__strip"></span>
+    <div class="vrow__body">
+      <div class="vrow__head">
+        <span class="vrow__base">sing</span>
+        <span class="vrow__forms">sang · sung</span>
+      </div>
+      <div class="vrow__trans">
+        <span class="vrow__tick"></span>
+        <span>петь</span>
+      </div>
+    </div>
+    <span class="vrow__done">
+      <Icon name="check" size={14} color="#fff" weight={2.4} />
+    </span>
+  </div>
+  <div class="vdiv"></div>
+
+  <div class="vrow" style="--g: var(--grp-abc); --g-surface: var(--grp-abc-surface)">
+    <span class="vrow__strip"></span>
+    <div class="vrow__body">
+      <div class="vrow__head">
+        <span class="vrow__base">drink</span>
+        <span class="vrow__forms">drank · drunk</span>
+      </div>
+      <div class="vrow__trans">
+        <span class="vrow__tick"></span>
+        <span>пить</span>
+      </div>
+    </div>
+  </div>
+  <div class="vdiv"></div>
+
+  <div class="vrow" style="--g: var(--grp-abc); --g-surface: var(--grp-abc-surface)">
+    <span class="vrow__strip"></span>
+    <div class="vrow__body">
+      <div class="vrow__head">
+        <span class="vrow__base">swim</span>
+        <span class="vrow__forms">swam · swum</span>
+      </div>
+      <div class="vrow__trans">
+        <span class="vrow__tick"></span>
+        <span>плавать</span>
+      </div>
+    </div>
+  </div>
+  <div class="vdiv"></div>
+
+  <!-- group: A·B·B -->
+  <div class="ghead ghead--abb">
+    <div class="ghead__row">
+      <div class="ghead__left">
+        <span class="ghead__fam">A·B·B</span>
+        <span class="ghead__title">-t окончание</span>
+      </div>
+      <span class="ghead__count">4/21</span>
+    </div>
+    <p class="ghead__hint">keep→kept, feel→felt, send→sent, burn→burnt</p>
+  </div>
+
+  <div class="vrow" style="--g: var(--grp-abb); --g-surface: var(--grp-abb-surface)">
+    <span class="vrow__strip"></span>
+    <div class="vrow__body">
+      <div class="vrow__head">
+        <span class="vrow__base">keep</span>
+        <span class="vrow__forms">kept · kept</span>
+      </div>
+      <div class="vrow__trans">
+        <span class="vrow__tick"></span>
+        <span>держать, хранить</span>
+      </div>
+    </div>
+    <span class="vrow__done">
+      <Icon name="check" size={14} color="#fff" weight={2.4} />
+    </span>
+  </div>
+  <div class="vdiv"></div>
+
+  <div class="vl__fill"></div>
+</div>
+
+<style>
+  .vl {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--canvas);
+  }
+
+  .vl__top {
+    background: #fff;
+  }
+
+  .vl__header {
+    display: flex;
+    align-items: center;
+    padding: 16px 8px 4px;
+  }
+  .vl__iconbtn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .vl__title {
+    flex: 1;
+    padding-left: 4px;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  .vl__meta {
+    padding: 0 12px;
+  }
+  .vl__progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .vl__progress-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+  .vl__progress-pct {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .vl :global(.vl__bar) {
+    margin-top: 8px;
+    margin-bottom: 14px;
+  }
+
+  .vl__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 46px;
+    padding: 0 14px;
+    background: var(--search-field-surface);
+    border-radius: var(--r-md);
+    margin-bottom: 12px;
+  }
+  .vl__search span {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-400);
+  }
+
+  .vl__filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+  .vl__pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 18px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-500);
+  }
+  .vl__pill--active {
+    background: var(--primary-tint);
+    border-color: var(--primary);
+    color: var(--primary-ink);
+  }
+  .vl__filters-spacer {
+    flex: 1;
+  }
+  .vl__quiz {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 18px;
+    background: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .vl__divider-hard {
+    height: 1px;
+    background: var(--border-soft);
+  }
+
+  /* group headers */
+  .ghead {
+    padding: 11px 16px;
+  }
+  .ghead--abc {
+    background: var(--grp-abc-surface);
+  }
+  .ghead--abb {
+    background: var(--grp-abb-surface);
+  }
+  .ghead__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ghead__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ghead__fam {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+  }
+  .ghead__title {
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+  .ghead__count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .ghead__hint {
+    font-size: 12.5px;
+    line-height: 17.5px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .ghead--abc .ghead__fam,
+  .ghead--abc .ghead__count {
+    color: var(--grp-abc);
+  }
+  .ghead--abc .ghead__title {
+    color: var(--grp-abc-ink);
+  }
+  .ghead--abc .ghead__hint {
+    color: var(--grp-abc-hint);
+  }
+  .ghead--abb .ghead__fam,
+  .ghead--abb .ghead__count {
+    color: var(--grp-abb);
+  }
+  .ghead--abb .ghead__title {
+    color: var(--grp-abb-ink);
+  }
+  .ghead--abb .ghead__hint {
+    color: var(--grp-abb-hint);
+  }
+
+  /* verb rows */
+  .vrow {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 12px 13px 16px;
+  }
+  .vrow__strip {
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+    background: var(--g);
+    flex: none;
+  }
+  .vrow__body {
+    flex: 1;
+  }
+  .vrow__head {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+  }
+  .vrow__base {
+    font-size: 17px;
+    line-height: 20.4px;
+    font-weight: 800;
+  }
+  .vrow__forms {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+  .vrow__trans {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+  }
+  .vrow__tick {
+    width: 2px;
+    height: 16px;
+    background: var(--g-surface);
+  }
+  .vrow__trans span {
+    font-size: 13px;
+    line-height: 18.2px;
+    font-weight: 500;
+    color: var(--ink-500);
+    padding-left: 9px;
+  }
+  .vrow__done {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--correct);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+
+  .vdiv {
+    height: 1px;
+    background: var(--border-soft);
+    margin-left: 12px;
+  }
+
+  .vl__fill {
+    flex: 1;
+    background: #fff;
+  }
+</style>

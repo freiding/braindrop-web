@@ -1,0 +1,87 @@
+---
+import Icon from "./Icon.astro";
+import { PLAY_URL } from "../consts";
+
+interface Props {
+  /** "landing" = nav + CTA; "legal" = logo + back link */
+  variant?: "landing" | "legal";
+}
+
+const { variant = "landing" } = Astro.props;
+---
+
+{
+  variant === "landing" ? (
+    <header class="site-header container">
+      <a href="/" class="site-header__logo" aria-label="BrainDrop — на главную">
+        <img src="/braindrop-lockup.svg" alt="BrainDrop" width="133" height="40" />
+      </a>
+      <nav class="site-header__nav">
+        <a href="#screens" class="site-header__link">Экраны</a>
+        <a href="#inside" class="site-header__link">Что внутри</a>
+        <a
+          href={PLAY_URL}
+          class="btn btn--nav"
+          target="_blank"
+          rel="noopener"
+        >
+          Google Play
+          <Icon name="chevron-right" size={14} color="#fff" weight={2.2} />
+        </a>
+      </nav>
+    </header>
+  ) : (
+    <header class="site-header site-header--legal prose-container">
+      <a href="/" aria-label="BrainDrop — на главную">
+        <img src="/braindrop-lockup.svg" alt="BrainDrop" width="120" height="36" />
+      </a>
+      <a href="/" class="site-header__link">← На главную</a>
+    </header>
+  )
+}
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 28px;
+  }
+
+  .site-header__logo img,
+  .site-header--legal img {
+    display: block;
+    width: auto;
+  }
+  .site-header__logo img {
+    height: 40px;
+  }
+  .site-header--legal img {
+    height: 36px;
+  }
+
+  .site-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .site-header__link {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-600);
+  }
+  .site-header__link:hover {
+    color: var(--primary);
+  }
+
+  @media (max-width: 600px) {
+    .site-header__nav {
+      gap: 14px;
+    }
+    .site-header__nav .site-header__link {
+      display: none;
+    }
+  }
+</style>

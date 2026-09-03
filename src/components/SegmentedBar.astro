@@ -1,0 +1,71 @@
+---
+/**
+ * SegmentedBar — the app's progress indicator (SegmentedBar.kt). A row of
+ * equal-flex segments, each in one of a few states. Explicit per-segment
+ * states keep the mockups pixel-accurate.
+ */
+type State = "full" | "partial" | "empty" | "correct" | "incorrect" | "current";
+
+interface Props {
+  states: State[];
+  palette?: "blue" | "white" | "quiz";
+  height?: number;
+  gap?: number;
+  radius?: number;
+  class?: string;
+}
+
+const {
+  states,
+  palette = "blue",
+  height = 9,
+  gap = 3,
+  radius = 3,
+  class: cls,
+} = Astro.props;
+
+const palettes: Record<string, Partial<Record<State, string>>> = {
+  blue: {
+    full: "var(--primary)",
+    partial: "rgba(43,95,217,0.45)",
+    empty: "var(--sunken)",
+  },
+  white: {
+    full: "#ffffff",
+    partial: "rgba(255,255,255,0.6)",
+    empty: "rgba(255,255,255,0.28)",
+  },
+  quiz: {
+    correct: "var(--correct)",
+    incorrect: "var(--incorrect)",
+    current: "var(--primary)",
+    full: "var(--primary)",
+    empty: "var(--border)",
+  },
+};
+
+const colors = palettes[palette];
+---
+
+<div
+  class:list={["seg", cls]}
+  style={`--seg-h:${height}px;--seg-gap:${gap}px;--seg-r:${radius}px`}
+>
+  {
+    states.map((s) => (
+      <span class="seg__item" style={`background:${colors[s] ?? "var(--sunken)"}`} />
+    ))
+  }
+</div>
+
+<style>
+  .seg {
+    display: flex;
+    gap: var(--seg-gap);
+    height: var(--seg-h);
+  }
+  .seg__item {
+    flex: 1;
+    border-radius: var(--seg-r);
+  }
+</style>

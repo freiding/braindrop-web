@@ -1,0 +1,292 @@
+---
+import Icon from "../Icon.astro";
+import SegmentedBar from "../SegmentedBar.astro";
+
+/** Rebuilt from HomeScreen.kt / StudyCategoryCard.kt — the hero device screen. */
+const seg = (full: number, partial: number, total: number) => [
+  ...Array<"full">(full).fill("full"),
+  ...Array<"partial">(partial).fill("partial"),
+  ...Array<"empty">(Math.max(0, total - full - partial)).fill("empty"),
+];
+---
+
+<div class="home">
+  <div class="home__topbar">
+    <img
+      class="home__logo"
+      src="/braindrop-lockup.svg"
+      alt="BrainDrop"
+      width="113"
+      height="34"
+    />
+    <div class="home__streak">
+      <Icon name="flame" size={15} color="#E8A32B" />
+      <span>7 дней</span>
+    </div>
+  </div>
+
+  <div class="home__intro">
+    <p class="home__headline">Ещё 4 глагола до цели на сегодня</p>
+    <p class="home__sub">Отмечено 6 из 10 · держите серию</p>
+  </div>
+
+  <div class="home__goal">
+    <div class="home__goal-row">
+      <span class="home__goal-label">ЦЕЛЬ ДНЯ</span>
+      <span class="home__goal-count">6 / 10</span>
+    </div>
+    <SegmentedBar
+      class="home__goal-bar"
+      palette="white"
+      height={8}
+      gap={4}
+      radius={4}
+      states={seg(6, 0, 10)}
+    />
+    <div class="home__goal-btn">
+      <span>Продолжить квиз</span>
+      <Icon name="chevron-right" size={16} color="#1B3F97" weight={2.4} />
+    </div>
+  </div>
+
+  <p class="home__section-label">КАТЕГОРИИ</p>
+
+  <div class="home__cats">
+    <div class="cat">
+      <div class="cat__row">
+        <div class="cat__tile">📚</div>
+        <div class="cat__body">
+          <p class="cat__name">Irregular Verbs</p>
+          <p class="cat__meta">179 глаголов · 12 групп</p>
+        </div>
+        <div class="cat__count">
+          <span class="cat__count-done">47</span>
+          <span class="cat__count-total">/179</span>
+        </div>
+      </div>
+      <SegmentedBar class="cat__bar" height={9} gap={3} radius={3} states={seg(3, 1, 12)} />
+    </div>
+
+    <div class="cat">
+      <div class="cat__row">
+        <div class="cat__tile">⏰</div>
+        <div class="cat__body">
+          <p class="cat__name">English Tenses</p>
+          <p class="cat__meta">12 времён с примерами</p>
+        </div>
+        <div class="cat__count">
+          <span class="cat__count-done">3</span>
+          <span class="cat__count-total">/12</span>
+        </div>
+      </div>
+      <SegmentedBar class="cat__bar" height={9} gap={3} radius={3} states={seg(3, 0, 12)} />
+    </div>
+  </div>
+
+  <div class="home__spacer"></div>
+
+  <nav class="home__tabs">
+    <div class="tab tab--active">
+      <Icon name="cards" size={24} color="#2B5FD9" weight={2.2} />
+      <span>Учить</span>
+    </div>
+    <div class="tab">
+      <Icon name="bar-chart" size={24} color="#8494A8" weight={2.4} />
+      <span>Прогресс</span>
+    </div>
+    <div class="tab">
+      <Icon name="person" size={24} color="#8494A8" weight={2.3} />
+      <span>Профиль</span>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--canvas);
+  }
+
+  .home__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 4px;
+  }
+  .home__logo {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+  .home__streak {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background: var(--streak-tint);
+  }
+  .home__streak span {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--streak-ink);
+  }
+
+  .home__intro {
+    padding: 18px 20px 16px;
+  }
+  .home__headline {
+    font-size: 25px;
+    line-height: 30.5px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .home__sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    line-height: 20.25px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+
+  .home__goal {
+    margin: 0 20px 18px;
+    background: var(--primary);
+    border-radius: var(--r-card);
+    padding: 18px 18px 16px;
+  }
+  .home__goal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .home__goal-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .home__goal-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .home :global(.home__goal-bar) {
+    margin-top: 12px;
+  }
+  .home__goal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 46px;
+    margin-top: 14px;
+    background: #fff;
+    border-radius: var(--r-md);
+  }
+  .home__goal-btn span {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary-ink);
+  }
+
+  .home__section-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: var(--ink-400);
+    padding: 0 20px 12px;
+  }
+
+  .home__cats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px;
+  }
+
+  .cat {
+    background: #fff;
+    border-radius: var(--r-card);
+    padding: 16px;
+  }
+  .cat__row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+  .cat__tile {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background: var(--primary-tint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .cat__body {
+    flex: 1;
+  }
+  .cat__name {
+    font-size: 16.5px;
+    line-height: 20.5px;
+    font-weight: 800;
+  }
+  .cat__meta {
+    font-size: 12.5px;
+    line-height: 17.5px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+  .cat__count {
+    text-align: right;
+  }
+  .cat__count-done {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  .cat__count-total {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-400);
+  }
+  .home :global(.cat__bar) {
+    margin-top: 14px;
+  }
+
+  .home__spacer {
+    flex: 1;
+  }
+
+  .home__tabs {
+    display: flex;
+    height: 64px;
+    background: #fff;
+    border-top: 1px solid var(--border-soft);
+  }
+  .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 8px;
+    gap: 5px;
+  }
+  .tab span {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-400);
+  }
+  .tab--active span {
+    font-weight: 800;
+    color: var(--primary);
+  }
+</style>

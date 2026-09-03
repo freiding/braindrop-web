@@ -1,0 +1,314 @@
+/* ------------------------------------------------------------------ *
+ * BrainDrop landing — design tokens + base styles
+ *
+ * Values mirror the app design system (light theme only; a dark theme
+ * is not designed for the app or this site). Source of truth:
+ * core/core-ui/.../ui/Theme.kt in the braindrop-kmp repo.
+ * ------------------------------------------------------------------ */
+
+/* --- Fonts (self-hosted, no third-party requests) ----------------- */
+
+@font-face {
+  font-family: "Manrope";
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/manrope-medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/manrope-semibold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/manrope-bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Manrope";
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/manrope-extrabold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-mono-medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-mono-semibold.ttf") format("truetype");
+}
+
+/* --- Tokens ------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  /* Brand / accent */
+  --primary: #2b5fd9;
+  --primary-ink: #1b3f97;
+  --primary-tint: #e8effe;
+
+  /* Ink ramp */
+  --ink-900: #101a2b;
+  --ink-600: #4a5a72;
+  --ink-500: #6b7a90;
+  --ink-400: #8494a8;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --canvas: #f4f6f9;
+  --sunken: #eaeef4;
+  --border: #dfe5ee;
+  --border-soft: #f0f3f7;
+
+  /* Status */
+  --correct: #17a05e;
+  --correct-tint: #e4f6ec;
+  --correct-ink: #0c6b3e;
+  --incorrect: #d8443c;
+  --incorrect-tint: #fbeae8;
+  --incorrect-ink: #96261f;
+  --streak: #e8a32b;
+  --streak-tint: #fdf2de;
+  --streak-ink: #8a5e0c;
+
+  /* App-mockup specifics */
+  --soon-surface: #eef1f6;
+  --soon-border: #cfd8e4;
+  --soon-tile: #e3e8f0;
+  --soon-ink: #6b7a90;
+  --answer-idle-outline: #c3cddb;
+  --answer-muted-surface: #f7f9fc;
+  --answer-muted-outline: #e7ebf2;
+  --search-field-surface: #f1f4f9;
+  --mistake-surface: #101a2b;
+  --mistake-accent: #8fb0f2;
+  --mistake-muted: #b9c4d3;
+  --mistake-hint: #8494a8;
+
+  /* Verb-group families */
+  --grp-aaa: #0f7f73;
+  --grp-aaa-surface: #e9f4f3;
+  --grp-aaa-ink: #0b5e55;
+  --grp-aaa-hint: #3e7c76;
+  --grp-abb: #5257d3;
+  --grp-abb-surface: #eeeefb;
+  --grp-abb-ink: #33359b;
+  --grp-abb-hint: #5a5ea8;
+  --grp-abc: #c2620f;
+  --grp-abc-surface: #fbf0e4;
+  --grp-abc-ink: #8a4a0b;
+  --grp-abc-hint: #9c6220;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-btn: 16px;
+  --r-lg: 18px;
+  --r-card: 20px;
+  --r-xl: 22px;
+  --r-xxl: 24px;
+  --r-phone: 46px;
+
+  /* Type families */
+  --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Layout */
+  --page-pad: 32px;
+  --content-max: 1120px;
+  --prose-max: 760px;
+
+  /* Elevation */
+  --shadow-card: 0 3px 10px rgba(0, 0, 0, 0.06);
+  --shadow-phone: 0 24px 60px rgba(16, 26, 43, 0.18);
+}
+
+/* --- Reset / base ----------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink-900);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+a:hover {
+  color: var(--primary-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- Shared layout / primitives -------------------------------- */
+
+.container {
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+.prose-container {
+  max-width: var(--prose-max);
+  margin-inline: auto;
+}
+
+.page {
+  min-height: 100vh;
+  background: var(--canvas);
+  padding-inline: var(--page-pad);
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.95px;
+  color: var(--ink-400);
+}
+
+.section-kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.95px;
+  color: var(--ink-400);
+  margin-bottom: 14px;
+}
+
+.h2 {
+  font-size: 32px;
+  line-height: 38px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  text-wrap: pretty;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--r-card);
+}
+
+/* --- Buttons -------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.btn:hover {
+  color: inherit;
+}
+
+/* Small pill in the header */
+.btn--nav {
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: var(--r-btn);
+  background: var(--primary);
+  color: #fff;
+  font-size: 14px;
+}
+.btn--nav:hover {
+  background: var(--primary-ink);
+  color: #fff;
+}
+
+/* Primary dark CTA */
+.btn--primary {
+  height: 56px;
+  padding: 0 26px;
+  border-radius: var(--r-btn);
+  background: var(--ink-900);
+  color: #fff;
+  font-size: 16px;
+}
+.btn--primary:hover {
+  background: #1d2a40;
+  color: #fff;
+}
+
+/* CTA sitting on the blue banner */
+.btn--on-primary {
+  height: 56px;
+  padding: 0 28px;
+  border-radius: var(--r-btn);
+  background: #fff;
+  color: var(--primary-ink);
+  font-size: 16px;
+}
+.btn--on-primary:hover {
+  background: #eef2fb;
+  color: var(--primary-ink);
+}
+
+/* --- Accessibility helper ----------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

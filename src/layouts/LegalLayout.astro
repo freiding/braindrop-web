@@ -1,0 +1,131 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title: string;
+  /** e.g. "ОБНОВЛЕНО 3 СЕНТЯБРЯ 2026" */
+  updated: string;
+  lead: string;
+  path: string;
+  description?: string;
+}
+
+const { title, updated, lead, path, description } = Astro.props;
+---
+
+<BaseLayout title={title} path={path} description={description}>
+  <div class="page">
+    <Header variant="legal" />
+    <article class="legal prose-container">
+      <p class="legal__kicker mono-label">{updated}</p>
+      <h1 class="legal__title">{title}</h1>
+      <p class="legal__lead">{lead}</p>
+      <div class="legal__cards">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 56px 0 96px;
+  }
+
+  .legal__kicker {
+    margin-bottom: 14px;
+  }
+
+  .legal__title {
+    font-size: 40px;
+    line-height: 46px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    text-wrap: balance;
+  }
+
+  .legal__lead {
+    margin-top: 20px;
+    font-size: 16.5px;
+    line-height: 27px;
+    font-weight: 500;
+    color: var(--ink-600);
+    text-wrap: pretty;
+  }
+
+  .legal__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  /* Cards are provided by the page as <section class="legal-card"> */
+  .legal :global(.legal-card) {
+    background: var(--surface);
+    border-radius: var(--r-card);
+    padding: 28px 32px;
+  }
+  .legal :global(.legal-card h2) {
+    margin: 0;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .legal :global(.legal-card > * + *) {
+    margin-top: 12px;
+  }
+  .legal :global(.legal-card p) {
+    font-size: 15px;
+    line-height: 25px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+
+  /* "ЧЕРНОВИК" advisory block */
+  .legal :global(.draft-note) {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--streak-tint);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    margin-top: 18px;
+  }
+  .legal :global(.draft-note__tag) {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.95px;
+    color: var(--streak-ink);
+    padding-top: 3px;
+    white-space: nowrap;
+  }
+  .legal :global(.draft-note__text) {
+    flex: 1;
+    font-size: 13.5px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--streak-ink);
+  }
+
+  @media (max-width: 720px) {
+    .legal {
+      padding: 40px 0 72px;
+    }
+    .legal__title {
+      font-size: 30px;
+      line-height: 36px;
+      letter-spacing: -0.8px;
+    }
+    .legal__lead {
+      font-size: 15.5px;
+      line-height: 25px;
+    }
+    .legal :global(.legal-card) {
+      padding: 22px 20px;
+    }
+  }
+</style>

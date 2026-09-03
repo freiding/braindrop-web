@@ -1,0 +1,80 @@
+---
+/**
+ * PhoneFrame — the device bezel used around every app mockup.
+ * Internal layout is locked to 390px (1dp = 1px), matching the app screens it
+ * is rebuilt from, so small viewports scale the whole frame with `zoom` rather
+ * than reflowing its contents (per the design handoff).
+ */
+interface Props {
+  /** optional caption rendered under the phone */
+  label?: string;
+  class?: string;
+}
+
+const { label, class: cls } = Astro.props;
+---
+
+<figure class:list={["phone-figure", cls]}>
+  <div class="phone">
+    <div class="phone__screen">
+      <slot />
+    </div>
+  </div>
+  {label && <figcaption class="phone__caption">{label}</figcaption>}
+</figure>
+
+<style>
+  .phone-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .phone {
+    /* content-box so the inner screen is exactly 390px (1dp = 1px), matching
+       the app screens these mockups are rebuilt from */
+    box-sizing: content-box;
+    width: 390px;
+    border: 10px solid var(--ink-900);
+    border-radius: var(--r-phone);
+    overflow: hidden;
+    background: var(--canvas);
+    box-shadow: var(--shadow-phone);
+  }
+
+  .phone__screen {
+    display: flex;
+    flex-direction: column;
+    height: 720px;
+    background: var(--canvas);
+  }
+
+  .phone__caption {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-600);
+    margin-top: 20px;
+  }
+
+  /* Scale the whole device down where a 410px-wide bezel + page padding
+     no longer fits. Steps, not fluid — CSS can't derive a unitless ratio
+     from the viewport, and `zoom` (unlike transform) keeps the layout box
+     in sync so surrounding flow and centring just work. */
+  @media (max-width: 520px) {
+    .phone-figure {
+      zoom: 0.9;
+    }
+  }
+  @media (max-width: 412px) {
+    .phone-figure {
+      zoom: 0.78;
+    }
+  }
+  @media (max-width: 350px) {
+    .phone-figure {
+      zoom: 0.68;
+    }
+  }
+</style>

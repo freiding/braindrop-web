@@ -45,10 +45,12 @@ docker build --output type=local,dest=dist .
 
 Then point your web server's `root` at that `dist/`.
 
-`docker-compose.yml` wraps the same build (nothing is served):
+`docker-compose.yml` runs that build, and can also serve the result with
+`astro preview` (still just Node — no web-server image):
 
 ```bash
-docker compose run --rm build   # writes ./dist on the host
+docker compose run --rm build   # one-shot: writes ./dist on the host
+docker compose up preview        # build + serve on http://localhost:13367
 ```
 
 ### Serving notes

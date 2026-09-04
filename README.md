@@ -2,9 +2,10 @@
 
 Promo page for the **BrainDrop** Android app (English trainer for Russian
 speakers) plus the two legal pages Google Play requires: Privacy Policy and
-Terms & Conditions. The landing page and Terms are in Russian; the Privacy
-Policy is bilingual — `/privacy/` (RU) and `/privacy/en/` (EN) with a RU/EN
-switch, both rendered from one source (`src/i18n/privacy.ts`).
+Terms & Conditions. The landing page is in Russian; both legal pages are
+bilingual — `/privacy/` + `/privacy/en/` and `/terms/` + `/terms/en/`, each
+with a RU/EN switch and rendered from one source (`src/i18n/privacy.ts`,
+`src/i18n/terms.ts`; shared shape in `src/i18n/types.ts`).
 
 Built from the high-fidelity references in `design/` (`*.dc.html` + `README.md`),
 which are a design bundle, not part of the deliverable, and are git-ignored.
@@ -72,15 +73,18 @@ public/
   fonts/                   Manrope 500/600/700/800, IBM Plex Mono 500/600 (.ttf)
   robots.txt
 src/
-  consts.ts                Play Store URL, PRIVACY_EMAIL, site copy, content figures
-  i18n/privacy.ts          Privacy Policy copy, RU + EN (single source for both routes)
+  consts.ts                Play Store URL, CONTACT_EMAIL, site copy, content figures
+  i18n/
+    types.ts               shared shape for the bilingual legal docs
+    privacy.ts             Privacy Policy copy, RU + EN (single source for both routes)
+    terms.ts               Terms & Conditions copy, RU + EN (single source)
   styles/global.css        tokens, @font-face, reset, shared primitives (.btn, .container…)
   layouts/
     BaseLayout.astro       <head>, meta/OG, font preloads, <html lang> + hreflang
     LegalLayout.astro      shell for the legal pages; optional RU/EN switch
   components/
     Header.astro Footer.astro Icon.astro
-    PrivacyPage.astro      renders the Privacy Policy for one language
+    PrivacyPage.astro TermsPage.astro   render one legal doc in one language
     SegmentedBar.astro     the app's progress indicator
     PhoneFrame.astro       device bezel; scales down with `zoom` on small screens
     mockups/               HomeMockup, VerbListMockup, QuizMockup — rebuilt 1:1 from
@@ -89,7 +93,8 @@ src/
     index.astro            hero · «Что внутри» · «Экраны» · «Скоро» · CTA · footer
     privacy/index.astro    Privacy Policy (RU)  → /privacy/
     privacy/en.astro       Privacy Policy (EN)  → /privacy/en/
-    terms.astro
+    terms/index.astro      Terms & Conditions (RU)  → /terms/
+    terms/en.astro         Terms & Conditions (EN)  → /terms/en/
     404.astro
 Dockerfile .dockerignore
 ```
@@ -99,20 +104,18 @@ booleans at the top of `src/pages/index.astro`.
 
 ## Before publishing
 
-- [ ] Set the real domain in `astro.config.mjs` (`site:`) — it drives canonical,
-      OG, hreflang and sitemap URLs. `robots.txt` also hard-codes it.
-- [ ] Set the real privacy contact in `src/consts.ts` (`PRIVACY_EMAIL`, currently
-      `privacy@braindrop.app`) — it must be a monitored mailbox and match the
-      contact e-mail on the Google Play listing. Terms still uses its own
-      placeholder `hello@example.com` in `src/pages/terms.astro`.
-- [ ] The Privacy Policy (`src/i18n/privacy.ts`) is written for the current app:
-      no data collection, offline-only, Belarus governing law, independent
-      developer with no named legal entity. Re-check it if any of that changes
-      (server sync, accounts, analytics, an iOS release, a registered entity).
-      Terms is still a **draft** (see its «ЧЕРНОВИК» note). None of this is legal
+- [ ] Keep the domain in `astro.config.mjs` (`site:`) and `robots.txt` in sync —
+      it drives canonical, OG, hreflang and sitemap URLs.
+- [ ] `CONTACT_EMAIL` in `src/consts.ts` must stay a monitored mailbox and match
+      the contact e-mail on the Google Play listing.
+- [ ] The legal copy (`src/i18n/privacy.ts`, `src/i18n/terms.ts`) is written for
+      the current app: no data collection, offline-only, free, Republic of
+      Belarus governing law, independent developer with no named legal entity.
+      Re-check both if any of that changes (server sync, accounts, analytics,
+      paid features, an iOS release, a registered entity). None of it is legal
       advice.
-- [ ] Bump the `updated` date in `src/i18n/privacy.ts` (both `ru` and `en`)
-      whenever the policy text changes.
+- [ ] Bump the `updated` date in the changed `src/i18n/*.ts` file (both `ru` and
+      `en`) whenever its text changes.
 - [ ] If the app's content numbers change (179 verbs / 12 groups, 12 tenses,
       72 phrasal verbs, 3 quiz types), update `src/consts.ts` and the mockups.
 - [ ] Consider a dedicated 1200×630 OG image (currently the square app icon).

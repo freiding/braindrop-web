@@ -3,45 +3,19 @@
  *
  * Single source of truth for /privacy/ (ru) and /privacy/en/ (en) — the two
  * pages render the same structure so the translations cannot drift. Both
- * versions are kept section-for-section identical.
- *
- * `p` blocks may contain inline HTML (links only); `list` blocks render as a
- * <ul>. Nothing here is legal advice.
+ * versions are kept section-for-section identical. Nothing here is legal advice.
  */
-import { PRIVACY_EMAIL, PLAY_URL } from "../consts";
+import type { LegalDoc } from "./types";
+import { CONTACT_EMAIL, PLAY_URL } from "../consts";
 
-export type PrivacyBlock = { p: string } | { list: string[] };
-
-export interface PrivacySection {
-  heading: string;
-  blocks: PrivacyBlock[];
-}
-
-export interface PrivacyDoc {
-  lang: "ru" | "en";
-  /** og:locale */
-  locale: string;
-  /** <h1> and <title> */
-  title: string;
-  /** kicker line, already prefixed and upper-cased */
-  updated: string;
-  /** <meta name="description"> */
-  description: string;
-  /** intro paragraph under the title */
-  lead: string;
-  /** aria-label for the RU/EN switch */
-  langSwitchLabel: string;
-  sections: PrivacySection[];
-}
-
-const mail = `<a href="mailto:${PRIVACY_EMAIL}">${PRIVACY_EMAIL}</a>`;
+const mail = `<a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>`;
 const googlePolicyRu =
   '<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Политикой конфиденциальности Google</a>';
 const googlePolicyEn =
   '<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>';
 const playLink = `<a href="${PLAY_URL}" target="_blank" rel="noopener">Google Play</a>`;
 
-const ru: PrivacyDoc = {
+const ru: LegalDoc = {
   lang: "ru",
   locale: "ru_RU",
   title: "Политика конфиденциальности",
@@ -194,7 +168,7 @@ const ru: PrivacyDoc = {
   ],
 };
 
-const en: PrivacyDoc = {
+const en: LegalDoc = {
   lang: "en",
   locale: "en_US",
   title: "Privacy Policy",

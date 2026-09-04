@@ -6,11 +6,11 @@ export const PLAY_URL =
 export const SITE_NAME = "BrainDrop";
 
 /**
- * Public contact address for privacy inquiries. Shown on /privacy/ and
- * /privacy/en/ and must match the contact e-mail in the Google Play listing.
- * Replace with the real, monitored mailbox before publishing.
+ * Public contact address for the legal pages (privacy inquiries, questions
+ * about the Terms, support). Shown on /privacy/, /privacy/en/, /terms/ and
+ * /terms/en/; must match the contact e-mail on the Google Play listing.
  */
-export const PRIVACY_EMAIL = "yauheni.bahatyrou@gmail.com";
+export const CONTACT_EMAIL = "yauheni.bahatyrou@gmail.com";
 
 export const SITE_DESCRIPTION =
   "BrainDrop — тренажёр английского для русскоязычных: неправильные глаголы, 12 времён и фразовые глаголы. Работает офлайн, без аккаунта и рекламы. Android.";

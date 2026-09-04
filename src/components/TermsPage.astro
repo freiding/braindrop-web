@@ -1,0 +1,56 @@
+---
+/**
+ * Renders the Terms and Conditions in one language. Both /terms/ (ru) and
+ * /terms/en/ (en) are thin wrappers around this so the two versions stay
+ * structurally identical — edit the copy in src/i18n/terms.ts.
+ */
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { terms } from "../i18n/terms";
+
+interface Props {
+  lang: "ru" | "en";
+}
+
+const { lang } = Astro.props;
+const doc = terms[lang];
+
+const RU_PATH = "/terms/";
+const EN_PATH = "/terms/en/";
+const path = lang === "en" ? EN_PATH : RU_PATH;
+
+const alternates = [
+  { hreflang: "ru", href: RU_PATH },
+  { hreflang: "en", href: EN_PATH },
+  { hreflang: "x-default", href: RU_PATH },
+];
+---
+
+<LegalLayout
+  title={doc.title}
+  updated={doc.updated}
+  lead={doc.lead}
+  path={path}
+  description={doc.description}
+  lang={lang}
+  langSwitch={{ current: lang, ruHref: RU_PATH, enHref: EN_PATH, label: doc.langSwitchLabel }}
+  alternates={alternates}
+>
+  {
+    doc.sections.map((section) => (
+      <section class="legal-card">
+        <h2>{section.heading}</h2>
+        {section.blocks.map((block) =>
+          "list" in block ? (
+            <ul>
+              {block.list.map((item) => (
+                <li set:html={item} />
+              ))}
+            </ul>
+          ) : (
+            <p set:html={block.p} />
+          ),
+        )}
+      </section>
+    ))
+  }
+</LegalLayout>

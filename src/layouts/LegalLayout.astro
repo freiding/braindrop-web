@@ -2,6 +2,14 @@
 import BaseLayout from "./BaseLayout.astro";
 import Header from "../components/Header.astro";
 
+interface LangSwitch {
+  current: "ru" | "en";
+  ruHref: string;
+  enHref: string;
+  /** aria-label for the switch */
+  label: string;
+}
+
 interface Props {
   title: string;
   /** e.g. "ОБНОВЛЕНО 3 СЕНТЯБРЯ 2026" */
@@ -9,16 +17,56 @@ interface Props {
   lead: string;
   path: string;
   description?: string;
+  lang?: "ru" | "en";
+  /** when set, renders a RU/EN switch next to the kicker */
+  langSwitch?: LangSwitch;
+  /** hreflang alternates, passed straight to BaseLayout */
+  alternates?: { hreflang: string; href: string }[];
 }
 
-const { title, updated, lead, path, description } = Astro.props;
+const {
+  title,
+  updated,
+  lead,
+  path,
+  description,
+  lang = "ru",
+  langSwitch,
+  alternates = [],
+} = Astro.props;
 ---
 
-<BaseLayout title={title} path={path} description={description}>
+<BaseLayout title={title} path={path} description={description} lang={lang} alternates={alternates}>
   <div class="page">
-    <Header variant="legal" />
+    <Header variant="legal" lang={lang} />
     <article class="legal prose-container">
-      <p class="legal__kicker mono-label">{updated}</p>
+      <div class="legal__top">
+        <p class="legal__kicker mono-label">{updated}</p>
+        {
+          langSwitch && (
+            <nav class="lang-switch" aria-label={langSwitch.label}>
+              <a
+                href={langSwitch.ruHref}
+                hreflang="ru"
+                lang="ru"
+                class:list={["lang-switch__opt", { "is-active": langSwitch.current === "ru" }]}
+                aria-current={langSwitch.current === "ru" ? "true" : undefined}
+              >
+                RU
+              </a>
+              <a
+                href={langSwitch.enHref}
+                hreflang="en"
+                lang="en"
+                class:list={["lang-switch__opt", { "is-active": langSwitch.current === "en" }]}
+                aria-current={langSwitch.current === "en" ? "true" : undefined}
+              >
+                EN
+              </a>
+            </nav>
+          )
+        }
+      </div>
       <h1 class="legal__title">{title}</h1>
       <p class="legal__lead">{lead}</p>
       <div class="legal__cards">
@@ -33,8 +81,44 @@ const { title, updated, lead, path, description } = Astro.props;
     padding: 56px 0 96px;
   }
 
-  .legal__kicker {
+  .legal__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
     margin-bottom: 14px;
+  }
+
+  .legal__kicker {
+    margin-bottom: 0;
+  }
+
+  .lang-switch {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--sunken);
+    border-radius: 12px;
+  }
+  .lang-switch__opt {
+    min-width: 42px;
+    padding: 5px 10px;
+    border-radius: 9px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-align: center;
+    color: var(--ink-500);
+  }
+  .lang-switch__opt:hover {
+    color: var(--ink-900);
+  }
+  .lang-switch__opt.is-active {
+    background: var(--surface);
+    color: var(--ink-900);
+    box-shadow: var(--shadow-card);
   }
 
   .legal__title {
@@ -82,6 +166,25 @@ const { title, updated, lead, path, description } = Astro.props;
     line-height: 25px;
     font-weight: 500;
     color: var(--ink-600);
+  }
+  .legal :global(.legal-card ul) {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .legal :global(.legal-card li) {
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 500;
+    color: var(--ink-600);
+  }
+  .legal :global(.legal-card li::marker) {
+    color: var(--ink-400);
+  }
+  .legal :global(.legal-card a) {
+    font-weight: 600;
   }
 
   /* "ЧЕРНОВИК" advisory block */

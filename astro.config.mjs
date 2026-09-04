@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // Set `site` to the real domain before deploying so canonical / OG / sitemap
 // URLs resolve correctly.
 export default defineConfig({
-  site: 'https://braindrop.app',
+  site: 'https://braindrop.freiding.by',
   // Trailing-slash + directory output => dist/<page>/index.html, which resolves
   // on any static host (and a plain `python -m http.server`) without rewrite rules.
   trailingSlash: 'always',

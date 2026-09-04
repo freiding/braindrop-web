@@ -7,26 +7,39 @@ interface Props {
   description?: string;
   /** path for <link rel="canonical">, e.g. "/privacy" */
   path?: string;
+  /** <html lang>; also drives og:locale */
+  lang?: string;
+  /** hreflang alternates; hrefs may be relative and are resolved against `site` */
+  alternates?: { hreflang: string; href: string }[];
 }
 
 const {
   title,
   description = SITE_DESCRIPTION,
   path = "/",
+  lang = "ru",
+  alternates = [],
 } = Astro.props;
 
+const origin = Astro.site ?? "https://braindrop.app";
 const pageTitle = title ? `${title} — ${SITE_NAME}` : `${SITE_NAME} — тренажёр английского для русскоязычных`;
-const canonical = new URL(path, Astro.site ?? "https://braindrop.app").href;
+const canonical = new URL(path, origin).href;
+const ogLocale = lang.startsWith("en") ? "en_US" : "ru_RU";
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      alternates.map((a) => (
+        <link rel="alternate" hreflang={a.hreflang} href={new URL(a.href, origin).href} />
+      ))
+    }
     <meta name="theme-color" content="#F4F6F9" />
     <meta name="color-scheme" content="light" />
 
@@ -38,7 +51,8 @@ const canonical = new URL(path, Astro.site ?? "https://braindrop.app").href;
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL("/app-icon.png", Astro.site ?? "https://braindrop.app").href} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:image" content={new URL("/app-icon.png", origin).href} />
     <meta name="twitter:card" content="summary" />
 
     <link

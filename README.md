@@ -2,7 +2,9 @@
 
 Promo page for the **BrainDrop** Android app (English trainer for Russian
 speakers) plus the two legal pages Google Play requires: Privacy Policy and
-Terms & Conditions. All content is in Russian.
+Terms & Conditions. The landing page and Terms are in Russian; the Privacy
+Policy is bilingual — `/privacy/` (RU) and `/privacy/en/` (EN) with a RU/EN
+switch, both rendered from one source (`src/i18n/privacy.ts`).
 
 Built from the high-fidelity references in `design/` (`*.dc.html` + `README.md`),
 which are a design bundle, not part of the deliverable, and are git-ignored.
@@ -70,20 +72,24 @@ public/
   fonts/                   Manrope 500/600/700/800, IBM Plex Mono 500/600 (.ttf)
   robots.txt
 src/
-  consts.ts                Play Store URL, site copy, content figures
+  consts.ts                Play Store URL, PRIVACY_EMAIL, site copy, content figures
+  i18n/privacy.ts          Privacy Policy copy, RU + EN (single source for both routes)
   styles/global.css        tokens, @font-face, reset, shared primitives (.btn, .container…)
   layouts/
-    BaseLayout.astro       <head>, meta/OG, font preloads
-    LegalLayout.astro      shell for the two legal pages
+    BaseLayout.astro       <head>, meta/OG, font preloads, <html lang> + hreflang
+    LegalLayout.astro      shell for the legal pages; optional RU/EN switch
   components/
     Header.astro Footer.astro Icon.astro
+    PrivacyPage.astro      renders the Privacy Policy for one language
     SegmentedBar.astro     the app's progress indicator
     PhoneFrame.astro       device bezel; scales down with `zoom` on small screens
     mockups/               HomeMockup, VerbListMockup, QuizMockup — rebuilt 1:1 from
                            the app's Compose screens
   pages/
     index.astro            hero · «Что внутри» · «Экраны» · «Скоро» · CTA · footer
-    privacy.astro terms.astro
+    privacy/index.astro    Privacy Policy (RU)  → /privacy/
+    privacy/en.astro       Privacy Policy (EN)  → /privacy/en/
+    terms.astro
     404.astro
 Dockerfile .dockerignore
 ```
@@ -94,11 +100,19 @@ booleans at the top of `src/pages/index.astro`.
 ## Before publishing
 
 - [ ] Set the real domain in `astro.config.mjs` (`site:`) — it drives canonical,
-      OG and sitemap URLs. `robots.txt` also hard-codes it.
-- [ ] Replace the placeholder support address `hello@example.com` in
-      `src/pages/privacy.astro` and `src/pages/terms.astro`.
-- [ ] The legal copy is a **draft** (see the «ЧЕРНОВИК» notes on both pages):
-      have a lawyer fill in the legal entity, governing law and real contact.
+      OG, hreflang and sitemap URLs. `robots.txt` also hard-codes it.
+- [ ] Set the real privacy contact in `src/consts.ts` (`PRIVACY_EMAIL`, currently
+      `privacy@braindrop.app`) — it must be a monitored mailbox and match the
+      contact e-mail on the Google Play listing. Terms still uses its own
+      placeholder `hello@example.com` in `src/pages/terms.astro`.
+- [ ] The Privacy Policy (`src/i18n/privacy.ts`) is written for the current app:
+      no data collection, offline-only, Belarus governing law, independent
+      developer with no named legal entity. Re-check it if any of that changes
+      (server sync, accounts, analytics, an iOS release, a registered entity).
+      Terms is still a **draft** (see its «ЧЕРНОВИК» note). None of this is legal
+      advice.
+- [ ] Bump the `updated` date in `src/i18n/privacy.ts` (both `ru` and `en`)
+      whenever the policy text changes.
 - [ ] If the app's content numbers change (179 verbs / 12 groups, 12 tenses,
       72 phrasal verbs, 3 quiz types), update `src/consts.ts` and the mockups.
 - [ ] Consider a dedicated 1200×630 OG image (currently the square app icon).

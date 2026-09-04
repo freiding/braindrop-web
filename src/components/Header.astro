@@ -5,9 +5,14 @@ import { PLAY_URL } from "../consts";
 interface Props {
   /** "landing" = nav + CTA; "legal" = logo + back link */
   variant?: "landing" | "legal";
+  /** localises the "back home" link on the legal variant */
+  lang?: "ru" | "en";
 }
 
-const { variant = "landing" } = Astro.props;
+const { variant = "landing", lang = "ru" } = Astro.props;
+
+const backLabel = lang === "en" ? "← Home" : "← На главную";
+const homeAria = lang === "en" ? "BrainDrop — home" : "BrainDrop — на главную";
 ---
 
 {
@@ -32,10 +37,10 @@ const { variant = "landing" } = Astro.props;
     </header>
   ) : (
     <header class="site-header site-header--legal prose-container">
-      <a href="/" aria-label="BrainDrop — на главную">
+      <a href="/" aria-label={homeAria}>
         <img src="/braindrop-lockup.svg" alt="BrainDrop" width="120" height="36" />
       </a>
-      <a href="/" class="site-header__link">← На главную</a>
+      <a href="/" class="site-header__link">{backLabel}</a>
     </header>
   )
 }

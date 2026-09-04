@@ -109,11 +109,13 @@ booleans at the top of `src/pages/index.astro`.
 - [ ] `CONTACT_EMAIL` in `src/consts.ts` must stay a monitored mailbox and match
       the contact e-mail on the Google Play listing.
 - [ ] The legal copy (`src/i18n/privacy.ts`, `src/i18n/terms.ts`) is written for
-      the current app: no data collection, offline-only, free, Republic of
-      Belarus governing law, independent developer with no named legal entity.
-      Re-check both if any of that changes (server sync, accounts, analytics,
-      paid features, an iOS release, a registered entity). None of it is legal
-      advice.
+      the current app: local learning progress, Android build sends de-identified
+      Firebase Analytics + Crashlytics data to Google (iOS collects nothing),
+      free, no accounts, Republic of Belarus governing law, independent developer
+      with no named legal entity. Re-check both if any of that changes (an in-app
+      consent gate, a user id / custom Analytics events, server sync, accounts,
+      ads, paid features, Firebase on iOS, a registered entity). None of it is
+      legal advice.
 - [ ] Bump the `updated` date in the changed `src/i18n/*.ts` file (both `ru` and
       `en`) whenever its text changes.
 - [ ] If the app's content numbers change (179 verbs / 12 groups, 12 tenses,

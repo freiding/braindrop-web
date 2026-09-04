@@ -4,6 +4,11 @@
  * Single source of truth for /privacy/ (ru) and /privacy/en/ (en) — the two
  * pages render the same structure so the translations cannot drift. Both
  * versions are kept section-for-section identical. Nothing here is legal advice.
+ *
+ * Reflects the app as of the Firebase change: learning progress stays local;
+ * the Android build additionally sends de-identified usage stats (Firebase
+ * Analytics) and crash diagnostics (Firebase Crashlytics) to Google. iOS ships
+ * the no-op backend and collects nothing.
  */
 import type { LegalDoc } from "./types";
 import { CONTACT_EMAIL, PLAY_URL } from "../consts";
@@ -13,6 +18,10 @@ const googlePolicyRu =
   '<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Политикой конфиденциальности Google</a>';
 const googlePolicyEn =
   '<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>';
+const firebaseInfoRu =
+  '<a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">условиями обработки данных в Firebase</a>';
+const firebaseInfoEn =
+  '<a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase Privacy and Security terms</a>';
 const playLink = `<a href="${PLAY_URL}" target="_blank" rel="noopener">Google Play</a>`;
 
 const ru: LegalDoc = {
@@ -21,8 +30,8 @@ const ru: LegalDoc = {
   title: "Политика конфиденциальности",
   updated: "ОБНОВЛЕНО 4 СЕНТЯБРЯ 2026",
   description:
-    "Как приложение BrainDrop обращается с данными: всё хранится на устройстве, регистрация не нужна, учебные данные на сервер не отправляются, рекламы и трекинга нет.",
-  lead: "BrainDrop — офлайн-приложение для изучения английского языка. Для работы ему не нужны учётная запись, интернет-соединение и разрешения устройства: все данные об обучении остаются в памяти вашего устройства и никуда не передаются. Эта Политика объясняет, что приложение хранит локально и почему разработчик не собирает о вас никакой информации.",
+    "Как приложение BrainDrop обращается с данными: учебный прогресс хранится на устройстве; версия для Android использует Firebase Analytics и Crashlytics (Google) для обезличенной статистики и отчётов о сбоях. Без аккаунта, без рекламы, без продажи данных.",
+  lead: "Учебные функции BrainDrop работают офлайн и без учётной записи, а прогресс обучения хранится на вашем устройстве. Чтобы понимать, как используется приложение, и быстро находить ошибки, версия для Android дополнительно собирает обезличенную статистику использования и отчёты о сбоях через сервисы Firebase от Google. Эта Политика объясняет, какие данные обрабатываются, кем и как это ограничить.",
   langSwitchLabel: "Язык политики",
   sections: [
     {
@@ -30,10 +39,12 @@ const ru: LegalDoc = {
       blocks: [
         {
           list: [
-            "Приложение не собирает и не передаёт персональные данные.",
-            "Нет регистрации, аккаунтов, рекламы, внешней аналитики и трекинга.",
-            "У приложения нет доступа в интернет — технически оно не может отправить данные на сервер.",
-            "Единственные сохраняемые данные — ваш учебный прогресс — хранятся только на устройстве.",
+            "Учебный прогресс хранится только на вашем устройстве.",
+            "Версия для Android использует Firebase Analytics и Crashlytics (сервисы Google) для обезличенной статистики использования и диагностики сбоев.",
+            "Аккаунта в приложении нет; эти данные не связаны с вашим именем, e-mail или телефоном и не используются для рекламы.",
+            "Мы не продаём данные. Единственный внешний получатель — Google как поставщик Firebase.",
+            "На iOS статистика и отчёты о сбоях не собираются.",
+            "Сбор можно ограничить в настройках устройства или полностью прекратить, удалив приложение.",
           ],
         },
       ],
@@ -45,14 +56,17 @@ const ru: LegalDoc = {
           p: `Приложение BrainDrop разрабатывается и распространяется частным разработчиком (далее — «Разработчик», «мы»). По любым вопросам, связанным с конфиденциальностью, пишите на ${mail}.`,
         },
         {
-          p: "Приложение и настоящая Политика подчиняются законодательству Республики Беларусь, включая Закон Республики Беларусь от 7 мая 2021 г. № 99-З «О защите персональных данных». Если вы пользуетесь приложением из другой юрисдикции, к вам также могут применяться местные нормы (например, GDPR в Европейской экономической зоне или CCPA/CPRA в Калифорнии); их требования соблюдаются за счёт того, что персональные данные не обрабатываются.",
+          p: "Приложение и настоящая Политика подчиняются законодательству Республики Беларусь, включая Закон Республики Беларусь от 7 мая 2021 г. № 99-З «О защите персональных данных». Если вы пользуетесь приложением из другой юрисдикции, к вам также могут применяться местные нормы — например, GDPR в Европейской экономической зоне и Великобритании или CCPA/CPRA в Калифорнии.",
+        },
+        {
+          p: "В отношении статистики и отчётов о сбоях (раздел «Аналитика и отчёты о сбоях») Разработчик выступает контролёром данных, а компания Google — обработчиком, действующим по нашему поручению.",
         },
       ],
     },
     {
-      heading: "Какие данные хранит приложение",
+      heading: "Какие данные приложение хранит на устройстве",
       blocks: [
-        { p: "Приложение сохраняет только сведения о вашем обучении:" },
+        { p: "На устройстве приложение сохраняет только сведения о вашем обучении:" },
         {
           list: [
             "какие элементы (неправильные глаголы, времена, фразовые глаголы) вы отметили изученными;",
@@ -62,21 +76,49 @@ const ru: LegalDoc = {
           ],
         },
         {
-          p: "Эти данные хранятся в локальной базе данных в приватном хранилище приложения на вашем устройстве. Они не привязаны к вашей личности, не содержат имени, адреса электронной почты или идентификаторов и не покидают устройство через приложение.",
+          p: "Эти данные хранятся в локальной базе данных в приватном хранилище приложения и не передаются Разработчику. Они не содержат вашего имени, адреса электронной почты или номера телефона.",
         },
         {
-          p: "Приложение не запрашивает и не использует: имя, адрес электронной почты, номер телефона, список контактов, геолокацию, камеру, микрофон, доступ к фотографиям и файлам, рекламный идентификатор и другие идентификаторы устройства.",
+          p: "Приложение не запрашивает доступ к списку контактов, точной геолокации, камере, микрофону, фотографиям и файлам.",
         },
       ],
     },
     {
-      heading: "Разработчик не собирает данные",
+      heading: "Аналитика и отчёты о сбоях",
       blocks: [
         {
-          p: "У приложения нет сетевого кода и разрешения на доступ в интернет, поэтому оно не отправляет и не может отправлять данные Разработчику или третьим лицам.",
+          p: "В версии для Android приложение подключает два сервиса Google — Firebase Analytics и Firebase Crashlytics. В версии для iOS они не используются.",
+        },
+        { p: "Firebase Analytics собирает обезличенную статистику использования:" },
+        {
+          list: [
+            "события запуска приложения, начала и окончания сессий, просмотры экранов внутри приложения;",
+            "технические сведения: модель устройства, версию операционной системы, версию приложения, язык интерфейса, страну или регион, определяемые по IP-адресу (сам IP-адрес Google использует для геолокации и не хранит его в отчётах в привязке к событиям);",
+            "сгенерированный Firebase псевдонимный идентификатор экземпляра приложения; на Android для части измерений может использоваться рекламный идентификатор устройства.",
+          ],
+        },
+        { p: "Firebase Crashlytics собирает диагностику сбоев и обработанных ошибок:" },
+        {
+          list: [
+            "трассировку стека и тип ошибки;",
+            "состояние устройства в момент сбоя: модель, версию ОС, доступную память и накопитель, ориентацию экрана, признак наличия root-доступа;",
+            "версию приложения, время сбоя и предшествующие технические журналы приложения;",
+            "псевдонимный идентификатор установки, создаваемый Crashlytics.",
+          ],
         },
         {
-          p: "Мы не создаём профилей пользователей и не используем сторонние SDK аналитики, рекламные сети, файлы cookie и иные технологии отслеживания. Мы не продаём, не сдаём в аренду и не передаём данные третьим лицам, поскольку у нас их нет.",
+          p: "Мы не задаём в этих сервисах идентификатор пользователя и не передаём в них ваше имя, e-mail, телефон или содержимое вашего обучения. Данные используются только в обобщённом виде — чтобы понимать, какими разделами пользуются, и находить и устранять ошибки. Они не применяются для рекламы, таргетинга или профилирования и не продаются.",
+        },
+        {
+          p: `Обработку выполняет Google (Google Ireland Limited и Google LLC) в соответствии с ${googlePolicyRu} и ${firebaseInfoRu}. По умолчанию сбор включён; как его ограничить, описано в разделе «Ваши права и выбор».`,
+        },
+      ],
+    },
+    {
+      heading: "Международная передача данных",
+      blocks: [
+        {
+          p: "Google обрабатывает данные Firebase на своих серверах, которые могут находиться за пределами вашей страны, в том числе в США. Для законности такой передачи Google применяет стандартные договорные условия Европейской комиссии и другие предусмотренные законом механизмы. Подробности — в политике конфиденциальности Google.",
         },
       ],
     },
@@ -106,21 +148,35 @@ const ru: LegalDoc = {
       heading: "Дети",
       blocks: [
         {
-          p: "Приложение не собирает персональные данные, не показывает рекламу, не содержит покупок внутри приложения, внешних ссылок, пользовательского контента и материалов для взрослых. Им можно безопасно пользоваться в любом возрасте, в том числе детям.",
+          p: "Приложение не показывает рекламу и не содержит покупок, внешних ссылок, пользовательского контента и материалов для взрослых.",
         },
         {
-          p: "Поскольку никакие данные не собираются, приложение по своей конструкции соответствует требованиям к защите данных детей (включая COPPA и соответствующие положения GDPR).",
+          p: "Приложение не адресовано специально детям младше 13 лет и не запрашивает возраст. Мы сознательно не собираем персональные данные детей. Статистика и отчёты о сбоях (см. выше) собираются в обезличенном виде и не используются для профилирования или рекламы.",
+        },
+        {
+          p: `Если вы родитель или опекун и полагаете, что нам стали известны данные вашего ребёнка, напишите на ${mail} — мы удалим их и примем меры, чтобы прекратить дальнейший сбор.`,
         },
       ],
     },
     {
-      heading: "Ваши права",
+      heading: "Ваши права и выбор",
       blocks: [
         {
-          p: "Законодательство о персональных данных (в том числе Закон Республики Беларусь № 99-З, GDPR и CCPA/CPRA) даёт вам права на доступ к своим данным, их исправление, удаление и перенос. Разработчик не обрабатывает ваши персональные данные, поэтому с нашей стороны нет данных, которые можно было бы предоставить, изменить или удалить.",
+          p: "Законодательство о персональных данных (Закон Республики Беларусь № 99-З, GDPR, CCPA/CPRA и другие применимые нормы) даёт вам права на доступ, исправление, удаление, ограничение и перенос данных, а также право возражать против обработки.",
         },
         {
-          p: "Все данные, которые сохранило приложение, вы контролируете сами: их можно удалить, очистив данные приложения или удалив приложение с устройства (см. следующий раздел).",
+          p: "Данные аналитики и отчётов о сбоях псевдонимны и не связаны с вашей личностью, поэтому по отдельному запросу мы, как правило, не можем найти в них именно ваши записи. При этом вы можете:",
+        },
+        {
+          list: [
+            "ограничить аналитику на Android: в настройках устройства сбросить или удалить рекламный идентификатор и отключить персонализацию рекламы;",
+            "отключить передачу диагностики использования в системных настройках устройства («Конфиденциальность» → «Диагностические данные» / «Использование и диагностика»);",
+            "полностью прекратить сбор, удалив приложение, — после удаления новые данные не собираются;",
+            `направить запрос на доступ или удаление на ${mail}; мы передадим его Google в применимой части и ответим вам.`,
+          ],
+        },
+        {
+          p: "Пользователи из ЕЭЗ и Великобритании вправе возражать против обработки, основанной на законном интересе, и подать жалобу в надзорный орган по защите данных. Правовое основание обработки статистики и отчётов о сбоях — наш законный интерес в обеспечении работоспособности и улучшении приложения при минимально необходимом объёме данных.",
         },
       ],
     },
@@ -128,7 +184,7 @@ const ru: LegalDoc = {
       heading: "Хранение и удаление данных",
       blocks: [
         {
-          p: "Учебный прогресс хранится на вашем устройстве до тех пор, пока вы его не удалите. Чтобы удалить все данные приложения:",
+          p: "Учебный прогресс хранится на вашем устройстве до тех пор, пока вы его не удалите. Чтобы удалить локальные данные приложения:",
         },
         {
           list: [
@@ -137,7 +193,10 @@ const ru: LegalDoc = {
           ],
         },
         {
-          p: "Копии на сервере не существует, поэтому отдельный запрос на удаление не требуется. Если вы пользовались резервным копированием устройства, удалите также резервную копию в настройках вашей учётной записи.",
+          p: "Данные Firebase Analytics, связанные с устройством или экземпляром приложения, хранятся Google ограниченный срок (по умолчанию 2 месяца, максимум 14 месяцев), после чего удаляются или агрегируются. Отчёты Firebase Crashlytics хранятся до 90 дней.",
+        },
+        {
+          p: "Удаление приложения прекращает дальнейший сбор, но не удаляет задним числом данные, уже полученные Google. Если вы пользовались резервным копированием устройства, удалите также резервную копию в настройках вашей учётной записи.",
         },
       ],
     },
@@ -145,7 +204,7 @@ const ru: LegalDoc = {
       heading: "Безопасность",
       blocks: [
         {
-          p: "Через приложение данные не покидают устройство, поэтому основной риск — это физический доступ к разблокированному устройству. Рекомендуем использовать блокировку экрана и своевременно устанавливать обновления операционной системы.",
+          p: "Учебный прогресс не покидает устройство, поэтому для него основной риск — физический доступ к разблокированному устройству. Данные статистики и отчётов о сбоях передаются в Google по зашифрованному соединению (HTTPS/TLS). Рекомендуем использовать блокировку экрана и своевременно устанавливать обновления операционной системы.",
         },
       ],
     },
@@ -174,8 +233,8 @@ const en: LegalDoc = {
   title: "Privacy Policy",
   updated: "LAST UPDATED 4 SEPTEMBER 2026",
   description:
-    "How the BrainDrop app handles data: everything stays on your device, no sign-up, no learning data sent to any server, no ads and no tracking.",
-  lead: "BrainDrop is an offline English-learning app. It needs no account, no internet connection, and no device permissions to work: everything about your learning stays in your device's storage and is never sent anywhere. This Policy explains what the app stores locally and why the developer collects no information about you.",
+    "How the BrainDrop app handles data: your learning progress stays on your device; the Android version uses Firebase Analytics and Crashlytics (Google) for de-identified statistics and crash reports. No account, no ads, no data sale.",
+  lead: "BrainDrop's learning features work offline and without an account, and your learning progress is stored on your device. To understand how the app is used and to find bugs quickly, the Android version additionally collects de-identified usage statistics and crash reports through Google's Firebase services. This Policy explains what data is processed, by whom, and how to limit it.",
   langSwitchLabel: "Policy language",
   sections: [
     {
@@ -183,10 +242,12 @@ const en: LegalDoc = {
       blocks: [
         {
           list: [
-            "The app does not collect or transmit any personal data.",
-            "No sign-up, no accounts, no ads, no third-party analytics, no tracking.",
-            "The app has no internet access — technically it cannot send data to a server.",
-            "The only data it saves — your learning progress — stays on your device.",
+            "Your learning progress is stored only on your device.",
+            "The Android version uses Firebase Analytics and Crashlytics (Google services) for de-identified usage statistics and crash diagnostics.",
+            "There is no account; this data is not linked to your name, e-mail, or phone number and is not used for advertising.",
+            "We do not sell data. The only external recipient is Google, as the Firebase provider.",
+            "On iOS, no statistics or crash reports are collected.",
+            "You can limit collection in your device settings, or stop it entirely by uninstalling the app.",
           ],
         },
       ],
@@ -198,14 +259,17 @@ const en: LegalDoc = {
           p: `BrainDrop is developed and distributed by an independent developer ("the Developer", "we"). For any privacy-related question, contact ${mail}.`,
         },
         {
-          p: 'The app and this Policy are governed by the laws of the Republic of Belarus, including the Law of the Republic of Belarus No. 99-Z of 7 May 2021 "On Personal Data Protection". If you use the app from another jurisdiction, local rules may also apply to you (for example, the GDPR in the European Economic Area or the CCPA/CPRA in California); their requirements are met because no personal data is processed.',
+          p: 'The app and this Policy are governed by the laws of the Republic of Belarus, including the Law of the Republic of Belarus No. 99-Z of 7 May 2021 "On Personal Data Protection". If you use the app from another jurisdiction, local rules may also apply to you — for example, the GDPR in the European Economic Area and the UK, or the CCPA/CPRA in California.',
+        },
+        {
+          p: 'For the usage statistics and crash reports (see "Analytics and crash reports"), the Developer is the data controller and Google acts as a processor on our behalf.',
         },
       ],
     },
     {
-      heading: "What the app stores",
+      heading: "What the app stores on your device",
       blocks: [
-        { p: "The app saves only information about your learning:" },
+        { p: "On your device, the app saves only information about your learning:" },
         {
           list: [
             "which items (irregular verbs, tenses, phrasal verbs) you marked as learned;",
@@ -215,21 +279,49 @@ const en: LegalDoc = {
           ],
         },
         {
-          p: "This data is kept in a local database in the app's private storage on your device. It is not linked to your identity, contains no name, e-mail address, or identifiers, and never leaves the device through the app.",
+          p: "This data is kept in a local database in the app's private storage and is not sent to the Developer. It contains no name, e-mail address, or phone number.",
         },
         {
-          p: "The app does not request or use your name, e-mail address, phone number, contacts, location, camera, microphone, access to photos or files, advertising identifier, or any other device identifiers.",
+          p: "The app does not request access to your contacts, precise location, camera, microphone, photos, or files.",
         },
       ],
     },
     {
-      heading: "The developer collects no data",
+      heading: "Analytics and crash reports",
       blocks: [
         {
-          p: "The app contains no networking code and holds no internet permission, so it does not and cannot send data to the Developer or to any third party.",
+          p: "In the Android version, the app includes two Google services — Firebase Analytics and Firebase Crashlytics. They are not used in the iOS version.",
+        },
+        { p: "Firebase Analytics collects de-identified usage statistics:" },
+        {
+          list: [
+            "app-open events, session start and end, and views of screens within the app;",
+            "technical information: device model, operating-system version, app version, interface language, and the country or region derived from your IP address (Google uses the IP address for geolocation and does not retain it alongside events in its reports);",
+            "a pseudonymous app-instance identifier generated by Firebase; on Android, the device advertising identifier may be used for some measurements.",
+          ],
+        },
+        { p: "Firebase Crashlytics collects crash and handled-error diagnostics:" },
+        {
+          list: [
+            "the stack trace and error type;",
+            "device state at the time of the crash: model, OS version, available memory and storage, screen orientation, and whether the device is rooted;",
+            "the app version, the time of the crash, and preceding technical logs from the app;",
+            "a pseudonymous installation identifier created by Crashlytics.",
+          ],
         },
         {
-          p: "We build no user profiles and use no third-party analytics SDKs, advertising networks, cookies, or other tracking technologies. We do not sell, rent, or share data with third parties, because we hold none.",
+          p: "We do not set a user identifier in these services and do not send them your name, e-mail, phone number, or the content of your learning. The data is used only in aggregate — to understand which sections are used and to find and fix bugs. It is not used for advertising, targeting, or profiling, and it is not sold.",
+        },
+        {
+          p: `Processing is carried out by Google (Google Ireland Limited and Google LLC) under the ${googlePolicyEn} and the ${firebaseInfoEn}. Collection is on by default; how to limit it is described in "Your rights and choices".`,
+        },
+      ],
+    },
+    {
+      heading: "International data transfers",
+      blocks: [
+        {
+          p: "Google processes Firebase data on its servers, which may be located outside your country, including in the United States. Google relies on the European Commission's Standard Contractual Clauses and other legally recognised mechanisms to cover these transfers. See Google's privacy policy for details.",
         },
       ],
     },
@@ -259,21 +351,35 @@ const en: LegalDoc = {
       heading: "Children",
       blocks: [
         {
-          p: "The app collects no personal data and contains no advertising, no in-app purchases, no external links, no user-generated content, and no adult material. It is safe to use at any age, including by children.",
+          p: "The app shows no advertising and contains no purchases, external links, user-generated content, or adult material.",
         },
         {
-          p: "Because nothing is collected, the app complies by design with children's data-protection requirements (including COPPA and the relevant GDPR provisions).",
+          p: "The app is not directed at children under 13 and does not ask for age. We do not knowingly collect children's personal data. The statistics and crash reports described above are collected in de-identified form and are not used for profiling or advertising.",
+        },
+        {
+          p: `If you are a parent or guardian and believe your child's data has reached us, contact ${mail} and we will delete it and act to stop further collection.`,
         },
       ],
     },
     {
-      heading: "Your rights",
+      heading: "Your rights and choices",
       blocks: [
         {
-          p: "Data-protection laws (including Belarus Law No. 99-Z, the GDPR, and the CCPA/CPRA) give you rights to access, correct, delete, and port your data. The Developer does not process your personal data, so there is nothing on our side to provide, change, or delete.",
+          p: "Data-protection laws (Belarus Law No. 99-Z, the GDPR, the CCPA/CPRA, and other applicable rules) give you rights to access, correct, delete, restrict, and port your data, and the right to object to processing.",
         },
         {
-          p: "You control all data the app has saved: you can remove it by clearing the app's data or uninstalling the app (see the next section).",
+          p: "The analytics and crash-report data is pseudonymous and not linked to your identity, so on an individual request we usually cannot locate your specific records. You can, however:",
+        },
+        {
+          list: [
+            "limit analytics on Android: reset or delete the advertising identifier in your device settings and turn off ad personalisation;",
+            "turn off sharing of usage diagnostics in your device's system settings (Privacy → Diagnostic data / Usage & diagnostics);",
+            "stop collection entirely by uninstalling the app — no new data is collected after removal;",
+            `send an access or deletion request to ${mail}; we will pass it on to Google where applicable and respond to you.`,
+          ],
+        },
+        {
+          p: "Users in the EEA and the UK have the right to object to processing based on legitimate interests and to lodge a complaint with a data-protection supervisory authority. The legal basis for processing the statistics and crash reports is our legitimate interest in keeping the app working and improving it, with the data minimised to what is necessary.",
         },
       ],
     },
@@ -281,7 +387,7 @@ const en: LegalDoc = {
       heading: "Data retention and deletion",
       blocks: [
         {
-          p: "Your learning progress stays on your device until you delete it. To remove all app data:",
+          p: "Your learning progress stays on your device until you delete it. To remove the app's local data:",
         },
         {
           list: [
@@ -290,7 +396,10 @@ const en: LegalDoc = {
           ],
         },
         {
-          p: "There is no server-side copy, so no separate deletion request is needed. If you used device backup, also delete the backup in your account settings.",
+          p: "Firebase Analytics data tied to a device or app instance is retained by Google for a limited period (2 months by default, 14 months at most), after which it is deleted or aggregated. Firebase Crashlytics reports are retained for up to 90 days.",
+        },
+        {
+          p: "Uninstalling the app stops further collection but does not retroactively delete data Google has already received. If you used device backup, also delete the backup in your account settings.",
         },
       ],
     },
@@ -298,7 +407,7 @@ const en: LegalDoc = {
       heading: "Security",
       blocks: [
         {
-          p: "Data does not leave your device through the app, so the main risk is physical access to an unlocked device. We recommend using a screen lock and installing operating-system updates promptly.",
+          p: "Your learning progress does not leave the device, so for that data the main risk is physical access to an unlocked device. The statistics and crash-report data is sent to Google over an encrypted connection (HTTPS/TLS). We recommend using a screen lock and installing operating-system updates promptly.",
         },
       ],
     },

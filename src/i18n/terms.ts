@@ -99,7 +99,7 @@ const ru: LegalDoc = {
           p: "Прогресс обучения хранится только на вашем устройстве. Синхронизации и резервного копирования на стороне Разработчика нет, поэтому при удалении Приложения, очистке его данных или сбросе устройства прогресс теряется безвозвратно.",
         },
         {
-          p: `Как Приложение обращается с данными, описано в ${privacyLinkRu}.`,
+          p: `Версия Приложения для Android использует сторонние сервисы Google — Firebase Analytics и Crashlytics — для обезличенной статистики использования и диагностики сбоев. Какие данные обрабатываются и как это ограничить, описано в ${privacyLinkRu}.`,
         },
       ],
     },
@@ -134,10 +134,13 @@ const ru: LegalDoc = {
       ],
     },
     {
-      heading: "Распространение через Google Play",
+      heading: "Сторонние сервисы",
       blocks: [
         {
-          p: "Приложение распространяется через Google Play. Google не является стороной настоящего Соглашения, не выступает спонсором Приложения и не поддерживает его. К отношениям, связанным с загрузкой и обновлением Приложения, применяются условия Google.",
+          p: "Приложение распространяется через Google Play и в версии для Android использует сервисы Google Firebase (Analytics и Crashlytics). Google не является стороной настоящего Соглашения, не выступает спонсором Приложения и не поддерживает его.",
+        },
+        {
+          p: "К загрузке и обновлению Приложения, а также к обработке данных указанными сервисами применяются условия и политики Google.",
         },
       ],
     },
@@ -250,7 +253,7 @@ const en: LegalDoc = {
           p: "Your learning progress is stored only on your device. There is no sync or backup on the Developer's side, so uninstalling the App, clearing its data, or resetting the device permanently loses your progress.",
         },
         {
-          p: `How the App handles data is described in the ${privacyLinkEn}.`,
+          p: `The Android version of the App uses third-party Google services — Firebase Analytics and Crashlytics — for de-identified usage statistics and crash diagnostics. What data is processed and how to limit it is described in the ${privacyLinkEn}.`,
         },
       ],
     },
@@ -285,10 +288,13 @@ const en: LegalDoc = {
       ],
     },
     {
-      heading: "Distribution via Google Play",
+      heading: "Third-party services",
       blocks: [
         {
-          p: "The App is distributed through Google Play. Google is not a party to these Terms and does not sponsor or endorse the App. Google's terms apply to downloading and updating the App.",
+          p: "The App is distributed through Google Play and, in the Android version, uses Google Firebase services (Analytics and Crashlytics). Google is not a party to these Terms and does not sponsor or endorse the App.",
+        },
+        {
+          p: "Google's terms and policies apply to downloading and updating the App and to the processing of data by those services.",
         },
       ],
     },
